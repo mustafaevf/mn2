@@ -62,8 +62,12 @@ export default function Board() {
         setUserEvent(null);
     }
     
-    const dealSubmit = (data) => {
-        s.emit('dealSubmit', {user, data});
+    const offerDeal = (data) => {
+        s.emit('offerDeal', {user, data});
+    }
+
+    const confirmDeal = (data) => {
+        s.emit('confirmDeal', {user, data});
     }
 
     const pawnProperty = (property) => {
@@ -102,6 +106,9 @@ export default function Board() {
             }
             if(state && state.event === 'payTax') {
                 callUserEvent("Оплата", state.data.price, payTax);
+            }
+            if(state && state.event === 'confirmDeal') {
+
             }
         }
     }, [boardState]);
@@ -166,7 +173,7 @@ export default function Board() {
                 {userEvent && (
                     <Popup title={userEvent.title} description={userEvent.description} action={userEvent.action} />
                 )}
-                {showDealPopup &&  <DealPopup to={selectedUser} from={players.find((player) => player.id === user.id)} close={handleUserClick} dealSubmit={dealSubmit}/> }
+                {showDealPopup &&  <DealPopup to={selectedUser} from={players.find((player) => player.id === user.id)} close={handleUserClick} offerDeal={offerDeal}/> }
                 {players && <Fields fields={fields} users={players} pawnProperty={pawnProperty} buybackProperty={buybackProperty} upgradeProperty={upgradeProperty}/> }
 
                 {players &&

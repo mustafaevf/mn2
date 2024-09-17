@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useAuthStore } from '../../store/authStore';
 
-export default function DealPopup({to, from, close, dealSubmit}) {
+export default function DealPopup({to, from, close, offerDeal}) {
     const [fromValue, setFromValue] = useState(null);
     const [toValue, setToValue] = useState(null);
   return (
@@ -25,7 +25,7 @@ export default function DealPopup({to, from, close, dealSubmit}) {
         </div>
         <div className="deal-popup-bottom">
             <button 
-            onClick={() => dealSubmit({
+            onClick={() => offerDeal({
                 to: { user: to, value: toValue }, 
                 from: { user: from, value: fromValue }
             })}
