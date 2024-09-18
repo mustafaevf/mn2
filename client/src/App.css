@@ -1,3 +1,8 @@
+@font-face {
+	font-family: Gilroy;
+	src: url('./Gilroy-Light.otf') format('opentype');
+	/* src: local('Gilroy-Light'), url('Gilroy-Light.otf') format('otf'); */
+}
 * {
 	margin: 0;
 	padding: 0;
@@ -5,12 +10,13 @@
 }
 body {
 	background-color: #121212;
-	font-family: GoogleSans, sans-serif;
-    font-size: 1.5rem;
+	font-family: Gilroy;
+    font-size: 1rem;
     color: rgb(249 249 249 / 1);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     line-height: 1.2;
+	font-weight: 600;
 
 }
 a, a:hover {
@@ -47,7 +53,7 @@ header {
 	background-color: #1a1c1e;
 }
 .box {
-	border-radius: 1rem;
+	border-radius: .75rem;
 	padding: 1rem;
 }
 .menu {
@@ -70,7 +76,7 @@ header {
 }
 button {
 	background: #7856f7;
-	border-radius: 1rem;
+	border-radius: .75rem;
 	outline: none;
 	color: #fff;
 	border: none;
@@ -81,7 +87,7 @@ button {
 }
 .a-btn {
 	background: #27292b;
-	border-radius: 1rem;
+	border-radius: .75rem;
 	outline: none;
 	color: #fff;
 	font-size: 1rem;
