@@ -84,10 +84,11 @@ class Game {
         this.io = io;
     }
 
-    dealSubmit(playerId, data) {
+    offerDeal(playerId, data) {
       if(playerId == data.from.user.id) {
         if(playerId != data.to.user.id) {
-          this.boardState.push({playerId: this.players[this.currentPlayerIndex].id, event: 'submitDeal', round: this.round});
+          console.log(data);
+          this.boardState.push({playerId: data.to.user.id, event: 'offerDeal', data: {data}});
           // console.log(data);
           // const to = this.players.find((candidate) => candidate.id === data.to.user.id);
           // const from = this.players.find((candidate) => candidate.id === data.from.user.id);

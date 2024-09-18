@@ -107,8 +107,9 @@ export default function Board() {
             if(state && state.event === 'payTax') {
                 callUserEvent("Оплата", state.data.price, payTax);
             }
-            if(state && state.event === 'confirmDeal') {
-
+            if(state && state.event === 'offerDeal') {
+                alert("пришла сделка");
+                console.log(state.data);
             }
         }
     }, [boardState]);
@@ -199,7 +200,7 @@ export default function Board() {
                 return player ? (
                     <div className={`user light-bg ${player.color}${game.currentPlayerId === player.id ? '': '-opacity'}`} onClick={() => handleUserClick(player)} key={user.user.login}>
                     <img
-                        src="https://sm.ign.com/ign_nordic/cover/a/avatar-gen/avatar-generations_prsz.jpg"
+                        src={`http://localhost:8080/uploads/${user.user.image}`}
                         alt="avatar"
                     />
                     <div className="user-login">{user.user.login}</div>
@@ -208,7 +209,7 @@ export default function Board() {
                 ) : (
                     <div className="user light-bg" key={user.user.login}>
                     <img
-                        src="https://sm.ign.com/ign_nordic/cover/a/avatar-gen/avatar-generations_prsz.jpg"
+                        src={`http://localhost:8080/uploads/${user.user.image}`}
                         alt="avatar"
                     />
                     <div className="user-login">{user.user.login}</div>
