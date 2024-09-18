@@ -5,6 +5,7 @@ const http = require('http');
 const { Pool } = require('pg');
 const socketIo = require('socket.io');
 const connection = require('./config/connection')
+const path = require('path');
 // const Userk = require('./Models/User')
 const { Lobby, BoardUser, Board, User, LobbyUser } = require('./associations')
 const lobbyRoutes = require('./routes/lobbyRoutes')
@@ -35,7 +36,7 @@ app.use(cors({
   }));
 
 
-
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api', lobbyRoutes);
 app.use('/api', platformRoutes);
 app.use('/api', userRoutes);
@@ -139,12 +140,12 @@ io.of('api/plays').on('connection', (socket) => {
     }
   });
 
-  socket.on('dealSubmit', async(data) => {
+  socket.on('offerDeal', async(data) => {
     // console.log(data);
     const lobbyUser = await LobbyUser.findOne({ where: { userId: data.user.id } });
     if (lobbyUser) {
       const current_game = games.find((game) => game.id === lobbyUser.lobbyId);
-      current_game.dealSubmit(data.user.id, data.data);
+      current_game.offerDeal(data.user.id, data.data);
       // console.log(data);
     }
   });
