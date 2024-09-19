@@ -1,6 +1,6 @@
 import './App.css';
 import Header from './components/Header';
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom'
 import MainPage from './pages/Main'
 import RegisterPage from './pages/Register';
 import AuthModal from './components/Modals/AuthModal';
@@ -10,29 +10,37 @@ import Board from './pages/Board';
 function App() {
   
   const [isOpenModalAuth, setOpenModalAuth] = useState(false);
- 
+  const location = useLocation();
 
   const openAuthModal = () => {
     setOpenModalAuth(!isOpenModalAuth);
   }
 
+  const path = !location.pathname.startsWith('/board');
+  
   return (
     <>
       {/* <Routes>
       
       </Routes> */}
-    <Header openAuthModal={openAuthModal}></Header>
+    {path && <Header openAuthModal={openAuthModal} />}
     <AuthModal openAuthModal={openAuthModal} state={isOpenModalAuth}/>
 
     
 
-    <div className="wrapper">
-    <Routes>
-        <Route path='/' element={<MainPage/>}/>  
-        <Route path='/register' element={<RegisterPage/>}/>
-        <Route path='/board/:uuid' element={<Board />}/>
-    </Routes>  
-    </div>
+    {path ? (
+        <div className="wrapper">
+          <Routes>
+            <Route path='/' element={<MainPage />} />
+            <Route path='/register' element={<RegisterPage />} />
+            <Route path='/board/:uuid' element={<Board />} />
+          </Routes>
+        </div>
+      ) : (
+        <Routes>
+          <Route path='/board/:uuid' element={<Board />} />
+        </Routes>
+      )}
     </>
   );
 }

@@ -51,7 +51,13 @@ export default function Fields({fields, users, pawnProperty, buybackProperty, up
             }}>
             {fields[i].title}   
             {fields[i].action === 'property' ? <div className={`field-price top group-${fields[i].group}`}>{ownerColor == null ? fields[i].price : propertyTax}k</div> : null}
+            {fields[i].action === 'property' && fields[i].currentLevel && fields[i].currentLevel != 0 ? <div className="field-info-stars">
+                        <img src="/star.svg" alt="" />
+                    </div>: null}   
+                
+                
                 <div className="field-info top" style={{ display: popupFieldId === fields[i].pos ? 'block' : 'none' , left:  `${1 + 55 * (i - 1)}` }}>
+                    
                     <div className={`field-info-header group-${fields[i].group}`}>
                         {fields[i].title}
                     </div>
@@ -59,12 +65,12 @@ export default function Fields({fields, users, pawnProperty, buybackProperty, up
                     <p>Базовая рента {fields[i].tax}</p>
                     <p>Покупка филиала {fields[i].upgrade}</p>
                     <p>Заложить {fields[i].pawn}</p>
-                    <p>1ур {fields[i].level && fields[i].level[1]}</p>
-                    <p>2ур {fields[i].level && fields[i].level[2]}</p>
-                    <p>3ур {fields[i].level && fields[i].level[3]}</p>
-                    <p>4ур {fields[i].level && fields[i].level[4]}</p>
-                    <p>5ур {fields[i].level && fields[i].level[5]}</p>
-                    {ownerId === user.id && (statusField == 1 ? <><Button name={'Заложить'} clickHandle={() => pawnProperty(fields[i])}/> <Button name={'Повысить'} clickHandle={() => upgradeProperty(fields[i])}/></>:  <Button name={'Выкупить'} clickHandle={() => buybackProperty(fields[i])}/>) }
+                    <p><img src="/star.svg" alt="" /> {fields[i].level && fields[i].level[1]}</p>
+                    <p><img src="/star.svg" alt="" /><img src="/star.svg" alt="" />  {fields[i].level && fields[i].level[2]}</p>
+                    <p><img src="/star.svg" alt="" /><img src="/star.svg" alt="" /> <img src="/star.svg" alt="" />  {fields[i].level && fields[i].level[3]}</p>
+                    <p><img src="/star.svg" alt="" /><img src="/star.svg" alt="" /> <img src="/star.svg" alt="" /><img src="/star.svg" alt="" /> {fields[i].level && fields[i].level[4]}</p>
+                    <p><img src="/star.svg" alt="" /><img src="/star.svg" alt="" /> <img src="/star.svg" alt="" /><img src="/star.svg" alt="" /> <img src="/star.svg" alt="" />  {fields[i].level && fields[i].level[5]}</p>
+                    {ownerId === user.id && (statusField == 1 ? <div className='inline'><Button name={'Заложить'} clickHandle={() => pawnProperty(fields[i])}/> <Button name={'Повысить'} clickHandle={() => upgradeProperty(fields[i])}/></div>:  <Button name={'Выкупить'} clickHandle={() => buybackProperty(fields[i])}/>) }
                     </div>
                 </div>
             </div>
@@ -96,12 +102,12 @@ export default function Fields({fields, users, pawnProperty, buybackProperty, up
                     <p>Базовая рента {fields[i].tax}</p>
                     <p>Покупка филиала {fields[i].upgrade}</p>
                     <p>Заложить {fields[i].pawn}</p>
-                    <p>1ур {fields[i].level && fields[i].level[1]}</p>
-                    <p>2ур {fields[i].level && fields[i].level[2]}</p>
-                    <p>3ур {fields[i].level && fields[i].level[3]}</p>
-                    <p>4ур {fields[i].level && fields[i].level[4]}</p>
-                    <p>5ур {fields[i].level && fields[i].level[5]}</p>
-                    {ownerId === user.id && (statusField == 1 ? <><Button name={'Заложить'} clickHandle={() => pawnProperty(fields[i])}/> <Button name={'Повысить'} clickHandle={() => upgradeProperty(fields[i])}/></>:  <Button name={'Выкупить'} clickHandle={() => buybackProperty(fields[i])}/>) }
+                    <p><img src="/star.svg" alt="" /> {fields[i].level && fields[i].level[1]}</p>
+                    <p><img src="/star.svg" alt="" /><img src="/star.svg" alt="" />  {fields[i].level && fields[i].level[2]}</p>
+                    <p><img src="/star.svg" alt="" /><img src="/star.svg" alt="" /> <img src="/star.svg" alt="" />  {fields[i].level && fields[i].level[3]}</p>
+                    <p><img src="/star.svg" alt="" /><img src="/star.svg" alt="" /> <img src="/star.svg" alt="" /><img src="/star.svg" alt="" /> {fields[i].level && fields[i].level[4]}</p>
+                    <p><img src="/star.svg" alt="" /><img src="/star.svg" alt="" /> <img src="/star.svg" alt="" /><img src="/star.svg" alt="" /> <img src="/star.svg" alt="" />  {fields[i].level && fields[i].level[5]}</p>
+                    {ownerId === user.id && (statusField == 1 ? <div className='inline'><Button name={'Заложить'} clickHandle={() => pawnProperty(fields[i])}/> <Button name={'Повысить'} clickHandle={() => upgradeProperty(fields[i])}/></div>:  <Button name={'Выкупить'} clickHandle={() => buybackProperty(fields[i])}/>) }
                     </div>
                 </div>
             </div>
@@ -135,12 +141,12 @@ export default function Fields({fields, users, pawnProperty, buybackProperty, up
                     <p>Базовая рента {fields[i].tax}</p>
                     <p>Покупка филиала {fields[i].upgrade}</p>
                     <p>Заложить {fields[i].pawn}</p>
-                    <p>1ур {fields[i].level && fields[i].level[1]}</p>
-                    <p>2ур {fields[i].level && fields[i].level[2]}</p>
-                    <p>3ур {fields[i].level && fields[i].level[3]}</p>
-                    <p>4ур {fields[i].level && fields[i].level[4]}</p>
-                    <p>5ур {fields[i].level && fields[i].level[5]}</p>
-                    {ownerId === user.id && (statusField == 1 ? <><Button name={'Заложить'} clickHandle={() => pawnProperty(fields[i])}/> <Button name={'Повысить'} clickHandle={() => upgradeProperty(fields[i])}/></>:  <Button name={'Выкупить'} clickHandle={() => buybackProperty(fields[i])}/>) }
+                    <p><img src="/star.svg" alt="" /> {fields[i].level && fields[i].level[1]}</p>
+                    <p><img src="/star.svg" alt="" /><img src="/star.svg" alt="" />  {fields[i].level && fields[i].level[2]}</p>
+                    <p><img src="/star.svg" alt="" /><img src="/star.svg" alt="" /> <img src="/star.svg" alt="" />  {fields[i].level && fields[i].level[3]}</p>
+                    <p><img src="/star.svg" alt="" /><img src="/star.svg" alt="" /> <img src="/star.svg" alt="" /><img src="/star.svg" alt="" /> {fields[i].level && fields[i].level[4]}</p>
+                    <p><img src="/star.svg" alt="" /><img src="/star.svg" alt="" /> <img src="/star.svg" alt="" /><img src="/star.svg" alt="" /> <img src="/star.svg" alt="" />  {fields[i].level && fields[i].level[5]}</p>
+                    {ownerId === user.id && (statusField == 1 ? <div className='inline'><Button name={'Заложить'} clickHandle={() => pawnProperty(fields[i])}/> <Button name={'Повысить'} clickHandle={() => upgradeProperty(fields[i])}/></div>:  <Button name={'Выкупить'} clickHandle={() => buybackProperty(fields[i])}/>) }
                     </div>
                 </div>
             </div>
@@ -174,12 +180,12 @@ export default function Fields({fields, users, pawnProperty, buybackProperty, up
                     <p>Базовая рента {fields[i].tax}</p>
                     <p>Покупка филиала {fields[i].upgrade}</p>
                     <p>Заложить {fields[i].pawn}</p>
-                    <p>1ур {fields[i].level && fields[i].level[1]}</p>
-                    <p>2ур {fields[i].level && fields[i].level[2]}</p>
-                    <p>3ур {fields[i].level && fields[i].level[3]}</p>
-                    <p>4ур {fields[i].level && fields[i].level[4]}</p>
-                    <p>5ур {fields[i].level && fields[i].level[5]}</p>
-                    {ownerId === user.id && (statusField == 1 ? <><Button name={'Заложить'} clickHandle={() => pawnProperty(fields[i])}/> <Button name={'Повысить'} clickHandle={() => upgradeProperty(fields[i])}/></>:  <Button name={'Выкупить'} clickHandle={() => buybackProperty(fields[i])}/>) }
+                    <p><img src="/star.svg" alt="" /> {fields[i].level && fields[i].level[1]}</p>
+                    <p><img src="/star.svg" alt="" /><img src="/star.svg" alt="" />  {fields[i].level && fields[i].level[2]}</p>
+                    <p><img src="/star.svg" alt="" /><img src="/star.svg" alt="" /> <img src="/star.svg" alt="" />  {fields[i].level && fields[i].level[3]}</p>
+                    <p><img src="/star.svg" alt="" /><img src="/star.svg" alt="" /> <img src="/star.svg" alt="" /><img src="/star.svg" alt="" /> {fields[i].level && fields[i].level[4]}</p>
+                    <p><img src="/star.svg" alt="" /><img src="/star.svg" alt="" /> <img src="/star.svg" alt="" /><img src="/star.svg" alt="" /> <img src="/star.svg" alt="" />  {fields[i].level && fields[i].level[5]}</p>
+                    {ownerId === user.id && (statusField == 1 ? <div className='inline'><Button name={'Заложить'} clickHandle={() => pawnProperty(fields[i])}/> <Button name={'Повысить'} clickHandle={() => upgradeProperty(fields[i])}/></div>:  <Button name={'Выкупить'} clickHandle={() => buybackProperty(fields[i])}/>) }
                     </div>
                 </div>
             </div>

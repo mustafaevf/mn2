@@ -1,7 +1,8 @@
 import React from 'react'
 import Button from '../Button'
 
-export default function Popup({title, description, action}) {
+export default function Popup({title, description, actions}) {
+    console.log(actions);
   return (
         <div className="popup-content">
             <div className="popup-header">
@@ -12,7 +13,15 @@ export default function Popup({title, description, action}) {
             <div className="popup-body">
                 {description}
             </div>
-            <Button name={"Действие"} clickHandle={action}/>
+            <div className="popup-bottom inline">
+                {
+                    (actions && actions.map((action, index) => (
+                        <Button key={index} name={action.title} clickHandle={action.func} />
+                    )))
+                }
+                {/* <Button name={"Действие"} clickHandle={action}/> */}
+            </div>
+            
 
         </div>
            

@@ -7,6 +7,7 @@ import Fields from '../components/Game/Fields';
 import Popup from '../components/Game/Popup';
 import Player from '../components/Game/Player';
 import DealPopup from '../components/Game/DealPopup';
+import Chat from '../components/Game/Chat';
 
 
 const s = io('http://localhost:8080/api/plays');
@@ -31,24 +32,32 @@ export default function Board() {
     const [boardState, setBoardState] = useState();
 
     const [selectedUser, setSelectedUser] = useState(null);
+    const [showUserPopup, setShowUserPopup] = useState(false);
+
     const [showDealPopup, setShowDealPopup] = useState(false);
+    const [selectedUserForDeal, setSelectedUserForDeal] = useState(null);
 
     const clickTest = () => {
         setUserEvent(null);
     }
 
     const clickUser = () => {
+ 
+    }
 
+    const createDeal = () => {
+        setShowUserPopup(false);
+        setShowDealPopup(true);
     }
 
     const handleUserClick = (user) => {
-        // console.log(user);
-        if(showDealPopup) {
+        if(showUserPopup) {
             setSelectedUser(null);
-            setShowDealPopup(false);
+            setShowUserPopup(false);
         } else {
             setSelectedUser(user);
-            setShowDealPopup(true);
+            setSelectedUserForDeal(user);
+            setShowUserPopup(true);
         }
     };
 
@@ -73,9 +82,11 @@ export default function Board() {
     const pawnProperty = (property) => {
         s.emit('pawnProperty', {user, property});
     }
+
     const buybackProperty = (property) => {
         s.emit('buybackProperty', {user, property});
     }
+
     const upgradeProperty = (property) => {
         s.emit('upgradeProperty', {user, property});
     }
@@ -85,8 +96,8 @@ export default function Board() {
         setUserEvent(null);
     }
 
-    const callUserEvent = (title, description, action) => {
-        const userEvent = {title: title, description: description, action: action};
+    const callUserEvent = (title, description, actions) => {
+        const userEvent = {title: title, description: description, actions: actions};
         setUserEvent(userEvent);
     }
 
@@ -99,10 +110,18 @@ export default function Board() {
             console.log('Состояние для текущего пользователя:', state);
             
             if (state && state.event === 'rollDice') {
-                callUserEvent("Оповещение", "Бросай куб", rollDice);
+                const actions = [{
+                    title: 'Бросить куб',
+                    func: rollDice
+                }]
+                callUserEvent("Твой ход", "Бросай куб", actions);
             }
             if(state && state.event === 'buyProperty') {
-                callUserEvent("Покупка недви", "", buyProperty);
+                const actions = [{
+                    title: 'Купить',
+                    func: buyProperty
+                }, {title: 'Аукцион', func: clickTest}]
+                callUserEvent("Покупка недви", "", actions);
             }
             if(state && state.event === 'payTax') {
                 callUserEvent("Оплата", state.data.price, payTax);
@@ -115,14 +134,10 @@ export default function Board() {
     }, [boardState]);
  
     
-    // игровый класс Game
     useEffect(() => {
-        console.log(game);
         setChats(game.events);
-        // chatRef = chatRef.current.scrollHeight;
         setPlayers(game.players);
         setBoardState(game.boardState);
-        console.log(game);
     }, [game]);
 
     useEffect(() => {
@@ -133,9 +148,17 @@ export default function Board() {
         s.on('event', (message, data) => {
             console.log(message);
             if(message === "rollDice") {
-                callUserEvent("Оповещение", "Бросай куб", rollDice);
+                const actions = [{
+                    title: 'Бросить куб',
+                    func: rollDice
+                }]
+                callUserEvent("Твой ход", "Бросай куб", actions);
             } else if(message == 'buyProperty') {
-                callUserEvent("Покупка недви", "", buyProperty);
+                 const actions = [{
+                    title: 'Купить',
+                    func: buyProperty
+                }, {title: 'Аукцион', func: clickTest}]
+                callUserEvent("Покупка недви", "", actions);
             } else if(message === 'payTax') {
                 callUserEvent("Оплата", data.price, payTax);
             }
@@ -171,49 +194,72 @@ export default function Board() {
         <div className="content">
             
             <div className="board bg">
-                {userEvent && (
-                    <Popup title={userEvent.title} description={userEvent.description} action={userEvent.action} />
-                )}
-                {showDealPopup &&  <DealPopup to={selectedUser} from={players.find((player) => player.id === user.id)} close={handleUserClick} offerDeal={offerDeal}/> }
-                {players && <Fields fields={fields} users={players} pawnProperty={pawnProperty} buybackProperty={buybackProperty} upgradeProperty={upgradeProperty}/> }
+                {userEvent && <Popup 
+                                    title={userEvent.title} 
+                                    description={userEvent.description} 
+                                    actions={userEvent.actions} 
+                                /> }
+                {showDealPopup && <DealPopup 
+                                        to={selectedUserForDeal} 
+                                        from={players.find((player) => player.id === user.id)} 
+                                        close={createDeal} 
+                                        offerDeal={offerDeal} 
+                                    /> }
+                {players && <Fields 
+                                fields={fields} 
+                                users={players} 
+                                pawnProperty={pawnProperty} 
+                                buybackProperty={buybackProperty} 
+                                upgradeProperty={upgradeProperty} 
+                            /> }
 
-                {players &&
-                players.map((player) => (
-                    <Player key={player.socketId} color={player.color} pos={player.position} players={players}/>
-                  ))
-                }
+                {players && players.map((player) => ( <Player key={player.socketId} color={player.color} pos={player.position} players={players} /> ))}
                 
-                <div className="chat" ref={chatRef}>
-                {chats && 
-                    chats.map((chat) => (
-                        <p>{chat}</p>
-                    ))
-                }
-                </div>
+               <Chat chats={chats}/>
             </div>
             
             <div className="users bg box">
             {users.length > 0 ? (
-                users.map((user) => {
-                const player = players && players.find((player) => player.id === user.user.id);
-                
+                users.map((us) => {
+                const player = players && players.find((player) => player.id === us.user.id);
                 return player ? (
-                    <div className={`user light-bg ${player.color}${game.currentPlayerId === player.id ? '': '-opacity'}`} onClick={() => handleUserClick(player)} key={user.user.login}>
-                    <img
-                        src={`http://localhost:8080/uploads/${user.user.image}`}
-                        alt="avatar"
-                    />
-                    <div className="user-login">{user.user.login}</div>
-                    <div className="user-balance">{player.balance}</div> 
+                    <div className={`user light-bg ${player.color}${game.currentPlayerId === player.id ? '': '-opacity'}`} onClick={() => handleUserClick(player)} key={us.user.login}>
+                        <img
+                            src={`http://localhost:8080/uploads/${us.user.image}`}
+                            alt="avatar"
+                        />
+                        <div className="user-login">{us.user.login}</div>
+                        <div className="user-balance">{player.balance}</div> 
+                        {showUserPopup && selectedUser.id === player.id ? (
+                            <div className="user-popup">
+                                
+                                    {selectedUser.id === user.id ? (
+                                        <div className="user-popup-item"> 
+                                            <div className="text">Покинуть</div>
+                                        </div>
+                                    ): (
+                                        <>
+                                            <div className="user-popup-item"> 
+                                                <div className="text">Пожаловаться</div>
+                                            </div>
+                                            <div className="user-popup-item"> 
+                                                <div className="text" onClick={() => createDeal()}>Обмен</div>
+                                            </div>
+                                        </>
+                                    )}
+
+                            
+                            </div>
+                        ): null}
+                        
                     </div>
                 ) : (
-                    <div className="user light-bg" key={user.user.login}>
-                    <img
-                        src={`http://localhost:8080/uploads/${user.user.image}`}
-                        alt="avatar"
-                    />
-                    <div className="user-login">{user.user.login}</div>
-                    
+                    <div className="user light-bg" key={us.user.login}>
+                        <img
+                            src={`http://localhost:8080/uploads/${us.user.image}`}
+                            alt="avatar"
+                        />
+                        <div className="user-login">{us.user.login}</div>
                     </div>
                 );
                 })

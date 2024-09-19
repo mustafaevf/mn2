@@ -34,7 +34,7 @@ class Player {
       const result = this.properties.find((prop) => prop.pos === property.pos);
       if(result.status === 1) {
         this.addBalance(result.pawn);
-        console.log("Поле " + result.pos + " заложено за " + result.pawn);
+        // console.log("Поле " + result.pos + " заложено за " + result.pawn);
         result.status = 0;
       }
     }
@@ -42,9 +42,12 @@ class Player {
     buybackProp(property) {
       const result = this.properties.find((prop) => prop.pos === property.pos);
       if(result.status === 0) {
-        this.reduceBalance(result.buyback);
-        console.log("Поле " + result.pos + " выкуплено за " + result.buyback);
+        if(this.reduceBalance(result.buyback) == -1) {
+          return 0;
+        }
+        // console.log("Поле " + result.pos + " выкуплено за " + result.buyback);
         result.status = 1;
+        return 1;
       }
     }
 
@@ -56,13 +59,20 @@ class Player {
         result.currentLevel += 1;
         result.tax = result.level[result.currentLevel];
         const price = result.upgrade;
-        this.reduceBalance(price);
+        if(this.reduceBalance(price) == -1) {
+          return 0;
+        }
+        return 1;
       }
-      console.log(result)
+      return 0;
     }
 
     reduceBalance(balance) {
+      if(this.balance - balance < 0) {
+        return -1;
+      }
       this.balance -= balance;
+      return this.balance;
     }
 
     addBalance(balance) {
@@ -220,6 +230,7 @@ class Game {
             let message = "Купить " + current_field.title + " за " + current_field.price;
             this.boardState.push({playerId: this.players[this.currentPlayerIndex].id, event: 'buyProperty', round: this.round});
             this.io.of('/api/plays').to(this.players[this.currentPlayerIndex].socketId).emit('event', 'buyProperty');
+            console.log("отправлен ивент");
             return;
           }
         }
