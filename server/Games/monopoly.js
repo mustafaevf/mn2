@@ -1,86 +1,10 @@
 const Fields = require('./Field');
+const Player = require('./Player');
 
 games = [];
 
-class Player {
-    constructor (id, socketId, boardId, login, color) {
-        this.id = id;
-        this.socketId = socketId;
-        this.boardId = boardId;
-        this.login = login;
-        this.balance = 2000;
-        this.position = 0;
-        this.color = color;
-        this.status = 0;
-        this.properties = [];
-    }
-
-    buyProperty(property) {
-      if(this.balance - property.price < 0) {
-        return;
-      }
-      this.balance -= property.price;
-      property.status = 1;
-      property.currentLevel = 0;
-      this.properties.push(property);
-    }
-
-    checkProp(property) {
-      const result = this.properties.filter((prop) => prop.group === property.group);
-      return result.length;
-    }
-
-    pawnProp(property) {
-      const result = this.properties.find((prop) => prop.pos === property.pos);
-      if(result.status === 1) {
-        this.addBalance(result.pawn);
-        // console.log("Поле " + result.pos + " заложено за " + result.pawn);
-        result.status = 0;
-      }
-    }
-
-    buybackProp(property) {
-      const result = this.properties.find((prop) => prop.pos === property.pos);
-      if(result.status === 0) {
-        if(this.reduceBalance(result.buyback) == -1) {
-          return 0;
-        }
-        // console.log("Поле " + result.pos + " выкуплено за " + result.buyback);
-        result.status = 1;
-        return 1;
-      }
-    }
-
-    upgradeProp(property) {
-      const count = this.checkProp(property);
-      const result = this.properties.find((prop) => prop.pos === property.pos);
-      console.log(result)
-      if(result.currentLevel !== 5) {
-        result.currentLevel += 1;
-        result.tax = result.level[result.currentLevel];
-        const price = result.upgrade;
-        if(this.reduceBalance(price) == -1) {
-          return 0;
-        }
-        return 1;
-      }
-      return 0;
-    }
-
-    reduceBalance(balance) {
-      if(this.balance - balance < 0) {
-        return -1;
-      }
-      this.balance -= balance;
-      return this.balance;
-    }
-
-    addBalance(balance) {
-      this.balance += balance;
-    }
-}
-
 class Game {
+
     constructor (id, uuid, max_person, io) {
         this.id = id;
         this.uuid = uuid;
@@ -92,34 +16,30 @@ class Game {
         this.currentPlayerId = 0;
         this.boardState = [];
         this.io = io;
+        this.colors = ['red', 'green', 'blue', 'yellow'];
+
+        // this.customSettings = [
+        //   {
+        //     '': 
+        //   }
+
+        // ]
     }
+
+
 
     offerDeal(playerId, data) {
       if(playerId == data.from.user.id) {
         if(playerId != data.to.user.id) {
           console.log(data);
           this.boardState.push({playerId: data.to.user.id, event: 'offerDeal', data: {data}});
-          // console.log(data);
-          // const to = this.players.find((candidate) => candidate.id === data.to.user.id);
-          // const from = this.players.find((candidate) => candidate.id === data.from.user.id);
-          // to.reduceBalance(Number(data.to.value));
-          // from.reduceBalance(Number(data.from.value));
-          // to.addBalance(Number(data.from.value));
-          // from.addBalance(Number(data.to.value));
         }
       }
       this.update();
-
     }
 
     addPlayer(userId, socketId, boardId, login) {
-        var color = 'red';
-        if(this.players.length == 1) {
-          color = 'green';
-        } else if(this.players.length == 2) {
-          color = 'blue';
-        }
-        const player = new Player(userId, socketId, boardId, login, color);
+        const player = new Player(userId, socketId, boardId, login, this.colors[this.players.length]);
         this.players.push(player);
     }
 
@@ -161,9 +81,10 @@ class Game {
       player.buyProperty(current_field);
       this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
       this.currentPlayerId = this.players[this.currentPlayerIndex].id;
-      this.boardState.push({playerId: this.players[this.currentPlayerIndex].id, event: 'rollDice', round: this.round});
-      this.update();
-      this.io.of('/api/plays').to(this.players[this.currentPlayerIndex].socketId).emit('event', 'rollDice');
+      // this.boardState.push({playerId: this.players[this.currentPlayerIndex].id, event: 'rollDice', round: this.round});
+      // this.update();
+      // this.io.of('/api/plays').to(this.players[this.currentPlayerIndex].socketId).emit('event', 'rollDice');
+      this._addEvent('rollDice');
     }
 
     rollDice() {
@@ -217,7 +138,7 @@ class Game {
                     data: { price: pr.tax, to: el.id, double: double }
                   });
                   
-                  this.io.of('/api/plays').to(this.players[this.currentPlayerIndex].socketId).emit('event', 'payTax', { price: pr.price });
+                  // this.io.of('/api/plays').to(this.players[this.currentPlayerIndex].socketId).emit('event', 'payTax', { price: pr.price });
                   return;
                 }
               }
@@ -228,8 +149,9 @@ class Game {
             this.broadcastMessage(this.players[this.currentPlayerIndex].login +  " выпал на поле");
             this.update();
             let message = "Купить " + current_field.title + " за " + current_field.price;
-            this.boardState.push({playerId: this.players[this.currentPlayerIndex].id, event: 'buyProperty', round: this.round});
-            this.io.of('/api/plays').to(this.players[this.currentPlayerIndex].socketId).emit('event', 'buyProperty');
+            this._addEvent('buyProperty');
+            // this.boardState.push({playerId: this.players[this.currentPlayerIndex].id, event: 'buyProperty', round: this.round});
+            // this.io.of('/api/plays').to(this.players[this.currentPlayerIndex].socketId).emit('event', 'buyProperty');
             console.log("отправлен ивент");
             return;
           }
@@ -255,9 +177,10 @@ class Game {
         this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
         this.currentPlayerId = this.players[this.currentPlayerIndex].id;
       }
-      this.boardState.push({playerId: this.players[this.currentPlayerIndex].id, event: 'rollDice', round: 1});
-      this.update();
-      this.io.of('/api/plays').to(this.players[this.currentPlayerIndex].socketId).emit('event', 'rollDice');
+      this._addEvent('rollDice');
+      // this.boardState.push({playerId: this.players[this.currentPlayerIndex].id, event: 'rollDice', round: 1});
+      // this.update();
+      // this.io.of('/api/plays').to(this.players[this.currentPlayerIndex].socketId).emit('event', 'rollDice');
     }
 
    payTax() {
@@ -273,9 +196,10 @@ class Game {
       this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
       this.currentPlayerId = this.players[this.currentPlayerIndex].id;
     } 
-    this.boardState.push({playerId: this.players[this.currentPlayerIndex].id, event: 'rollDice', round: this.round});
-    this.update();
-    this.io.of('/api/plays').to(this.players[this.currentPlayerIndex].socketId).emit('event', 'rollDice');
+    this._addEvent('rollDice');
+    // this.boardState.push({playerId: this.players[this.currentPlayerIndex].id, event: 'rollDice', round: this.round});
+    // this.update();
+    // this.io.of('/api/plays').to(this.players[this.currentPlayerIndex].socketId).emit('event', 'rollDice');
    }
 
     startGame() {
@@ -288,14 +212,27 @@ class Game {
       this.currentPlayerIndex = currentPlayerIndex;
       this.currentPlayerId = this.players[currentPlayerIndex].id;
       this.broadcastMessage(this.players[currentPlayerIndex].login + " бросает куб первым");
-      this.boardState.push({playerId: this.currentPlayerId, event: 'rollDice', round: 1, status: 0});
+      this._addEvent('rollDice');
+      // this.boardState.push({playerId: this.currentPlayerId, event: 'rollDice', round: 1, status: 0});
+      // this.update();
+      // this.io.of('/api/plays').to(this.players[currentPlayerIndex].socketId).emit('event', 'rollDice');
+    }
+
+    _addEvent(event, _params) {
+      this.boardState.push(
+        {
+          playerId: this.players[this.currentPlayerIndex].id, 
+          event: event, 
+          round: this.round,
+          data: _params ? _params : null
+        }
+      );
       this.update();
-      this.io.of('/api/plays').to(this.players[currentPlayerIndex].socketId).emit('event', 'rollDice');
+      this.io.of('/api/plays').to(this.players[this.currentPlayerIndex].socketId).emit('event', event, _params);
     }
 
     broadcastMessage(data) {
       this.events.push(data);
-      // this.update();
     }
 
     update() {
