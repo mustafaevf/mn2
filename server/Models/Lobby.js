@@ -19,8 +19,11 @@ const Lobby = connection.define('lobby', {
     status: {
         type: DataTypes.INTEGER,
         allowNull: false
+    },
+    settings: {
+        type: DataTypes.JSON,
+        allowNull: true,
     }
-
 });
 
 module.exports = Lobby;

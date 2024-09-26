@@ -31,11 +31,10 @@ class Game {
     offerDeal(playerId, data) {
       if(playerId == data.from.user.id) {
         if(playerId != data.to.user.id) {
-          console.log(data);
-          this.boardState.push({playerId: data.to.user.id, event: 'offerDeal', data: {data}});
+          this._addEvent('offerDeal', {data}, data.to.user.id);
         }
       }
-      this.update();
+
     }
 
     addPlayer(userId, socketId, boardId, login) {
@@ -48,7 +47,6 @@ class Game {
       if(this.currentPlayerId == candidate.id) {
         candidate.pawnProp(property);
         this.broadcastMessage(candidate.login +  " заложил " + property.title + " за " + property.pawn);
-        this.update();
       }
     }
 
@@ -57,7 +55,6 @@ class Game {
       if(this.currentPlayerId == candidate.id) {
         candidate.buybackProp(property);
         this.broadcastMessage(candidate.login +  " выкупил " + property.title + " за " + property.buyback);
-        this.update();
       }
     }
 
@@ -66,7 +63,6 @@ class Game {
       if(this.currentPlayerId == candidate.id) {
         candidate.upgradeProp(property);
         this.broadcastMessage(candidate.login +  " повысил ренту " + property.title + " за " + property.upgrade);
-        this.update();
       }
     }
 
@@ -77,16 +73,16 @@ class Game {
       }
       const player = this.players[this.currentPlayerIndex];
       let current_field = Fields.find(field => field.pos === player.position);
-      console.log(player.login + " покупка недвиги " + current_field.title);
+
       player.buyProperty(current_field);
-      this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
-      this.currentPlayerId = this.players[this.currentPlayerIndex].id;
-      // this.boardState.push({playerId: this.players[this.currentPlayerIndex].id, event: 'rollDice', round: this.round});
-      // this.update();
-      // this.io.of('/api/plays').to(this.players[this.currentPlayerIndex].socketId).emit('event', 'rollDice');
+      this._nextPlayer();
       this._addEvent('rollDice');
     }
 
+    _roll() {
+      return Math.floor(Math.random() * 6) + 1;
+    }
+    
     rollDice() {
       const dice1 = Math.floor(Math.random() * 6) + 1;
       const dice2 = Math.floor(Math.random() * 6) + 1;
@@ -97,7 +93,6 @@ class Game {
         player.position = (player.position - Fields.length) + dice_random;
         player.balance += 2000;
         this.broadcastMessage(this.players[this.currentPlayerIndex].login +  " прошел круг и получил 2000");
-        // events.push(RoomEvent(currentPlayer.login + " прошел круг и получил 2.000", currentPlayer.boardId));
       } else {
         player.position += dice_random;
       }
@@ -126,7 +121,6 @@ class Game {
                     return;
                   }
                   this.broadcastMessage(this.players[this.currentPlayerIndex].login + " выпал на чужую клетку ");
-                  this.update();
                   let double = false;
                   if(dice1 === dice2) {
                     double = true;
@@ -147,12 +141,8 @@ class Game {
           if(isProp) {
             this.players[this.currentPlayerIndex].checkProp(current_field);
             this.broadcastMessage(this.players[this.currentPlayerIndex].login +  " выпал на поле");
-            this.update();
             let message = "Купить " + current_field.title + " за " + current_field.price;
             this._addEvent('buyProperty');
-            // this.boardState.push({playerId: this.players[this.currentPlayerIndex].id, event: 'buyProperty', round: this.round});
-            // this.io.of('/api/plays').to(this.players[this.currentPlayerIndex].socketId).emit('event', 'buyProperty');
-            console.log("отправлен ивент");
             return;
           }
         }
@@ -174,14 +164,24 @@ class Game {
         }
       }
       if(dice1 != dice2) {
-        this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
-        this.currentPlayerId = this.players[this.currentPlayerIndex].id;
+        // this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
+        // this.currentPlayerId = this.players[this.currentPlayerIndex].id;
+        this._nextPlayer();
       }
       this._addEvent('rollDice');
-      // this.boardState.push({playerId: this.players[this.currentPlayerIndex].id, event: 'rollDice', round: 1});
-      // this.update();
-      // this.io.of('/api/plays').to(this.players[this.currentPlayerIndex].socketId).emit('event', 'rollDice');
+
     }
+
+    _movePlayer(player, diceSum) {
+      if (player.position + diceSum > Fields.length) {
+        player.position = (player.position - Fields.length) + diceSum;
+        player.balance += 2000;
+        this.broadcastMessage(`${player.login} прошел круг и получил 2000`);
+      } else {
+        player.position += diceSum;
+      }
+    }
+    
 
    payTax() {
     const state = this.boardState[this.boardState.length - 1];
@@ -193,8 +193,9 @@ class Game {
     const to = this.players.find((candidate) => candidate.id === state.data.to);
     to.addBalance(state.data.price);
     if(!state.double) {
-      this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
-      this.currentPlayerId = this.players[this.currentPlayerIndex].id;
+      this._nextPlayer();
+      // this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
+      // this.currentPlayerId = this.players[this.currentPlayerIndex].id;
     } 
     this._addEvent('rollDice');
     // this.boardState.push({playerId: this.players[this.currentPlayerIndex].id, event: 'rollDice', round: this.round});
@@ -206,36 +207,38 @@ class Game {
       if(this.players.length != this.max_person) {
         return null;
       }
-
       this.round += 1;
       let currentPlayerIndex = Math.floor(Math.random() * this.players.length);
       this.currentPlayerIndex = currentPlayerIndex;
       this.currentPlayerId = this.players[currentPlayerIndex].id;
       this.broadcastMessage(this.players[currentPlayerIndex].login + " бросает куб первым");
       this._addEvent('rollDice');
-      // this.boardState.push({playerId: this.currentPlayerId, event: 'rollDice', round: 1, status: 0});
-      // this.update();
-      // this.io.of('/api/plays').to(this.players[currentPlayerIndex].socketId).emit('event', 'rollDice');
     }
 
-    _addEvent(event, _params) {
+    _nextPlayer() {
+      this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
+      this.currentPlayerId = this.players[this.currentPlayerIndex].id;
+    }
+
+    _addEvent(event, _params, _playerId) {
       this.boardState.push(
         {
-          playerId: this.players[this.currentPlayerIndex].id, 
+          playerId: _playerId ? _playerId : this.players[this.currentPlayerIndex].id, 
           event: event, 
           round: this.round,
           data: _params ? _params : null
         }
       );
-      this.update();
+      this._update();
       this.io.of('/api/plays').to(this.players[this.currentPlayerIndex].socketId).emit('event', event, _params);
     }
 
     broadcastMessage(data) {
       this.events.push(data);
+      this._update();
     }
 
-    update() {
+    _update() {
       this.io.of('/api/plays').to(this.id).emit('update', { id: this.id, 
         uuid: this.uuid, 
         max_person: this.max_person, 

@@ -11,7 +11,7 @@ export default function CreateLobbyModal({openModal, state}) {
     const handleCreateLobby = async () => {
         await check();
         const response = await axios.post('http://localhost:8080/api/lobby', {max_person: maxPerson, platformId: 1});
-        
+        console.log(response)
         openModal();
     };
     if(state == false) return null;

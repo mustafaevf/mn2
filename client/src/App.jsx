@@ -3,6 +3,7 @@ import Header from './components/Header';
 import { Routes, Route, useLocation } from 'react-router-dom'
 import MainPage from './pages/Main'
 import RegisterPage from './pages/Register';
+import UserPage from './pages/User';
 import AuthModal from './components/Modals/AuthModal';
 import { useState } from 'react';
 import Board from './pages/Board';
@@ -33,6 +34,7 @@ function App() {
           <Routes>
             <Route path='/' element={<MainPage />} />
             <Route path='/register' element={<RegisterPage />} />
+            <Route path='/users/:id' element={<UserPage />} />
             <Route path='/board/:uuid' element={<Board />} />
           </Routes>
         </div>

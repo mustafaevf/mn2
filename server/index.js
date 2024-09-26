@@ -80,7 +80,7 @@ io.of('api/plays').on('connection', (socket) => {
       }
       // console.log(current_game);
       console.log("metka");
-      current_game.update();
+      current_game._update();
 
       await lobbyUser.update({
         socketId: socket.id,
@@ -164,7 +164,7 @@ connection.authenticate()
     server.listen(8080, () => {
       console.log('server started http://127.0.0.1:8080/');
     });
-    return connection.sync({ alter: true });
+    return connection.sync({ alter: false });
   })
   .then(() => {
     console.log('Синхронизация моделей прошла успешно.');

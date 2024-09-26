@@ -15,7 +15,7 @@ export default function Lobby({ id, max_person, createdAt, ownerId }) {
     try {
       const response = await axios.get(`http://localhost:8080/api/lobby/${id}/users`);
       setUsers(response.data.users);
-      console.log("вызова");
+      // console.log("вызова");
     } catch (error) {
       console.error('Ошибка при загрузке списка пользователей:', error);
     }
@@ -25,7 +25,7 @@ export default function Lobby({ id, max_person, createdAt, ownerId }) {
     try {
       await check();
       const response = await axios.get(`http://localhost:8080/api/lobby/${id}/start`);
-      console.log(response);
+      // console.log(response);
     } catch (error) {
       console.log(error);
     }
@@ -58,7 +58,7 @@ export default function Lobby({ id, max_person, createdAt, ownerId }) {
 
     // Настройка интервального обновления
     const intervalId = setInterval(() => {
-      console.log("dpsads");
+      // console.log("dpsads");
       fetchUsers();
     }, 500); // Обновление каждые 5 секунд (можно изменить)
 
@@ -119,6 +119,7 @@ export default function Lobby({ id, max_person, createdAt, ownerId }) {
           <div className="game_title-admin">
             {isAuth && ownerId == user.id && (
                 <Button name="Начать игру" clickHandle={handleClickStartLobby} />
+                
             )}
           </div>
           
@@ -127,7 +128,15 @@ export default function Lobby({ id, max_person, createdAt, ownerId }) {
       <div className="game_body mt-2 mb-1">
         {getUsers()}
       </div>
+      {isAuth && ownerId == user.id && (
+        <>
+          <div className="game_header mb-1">
+            
+          </div>
+          <h3>Настры</h3>
+        </>
 
+      )}
     </div>
   )
 }

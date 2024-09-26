@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  db:
+    container_name: 'db'
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_DB=db
+      - POSTGRES_PASSWORD=12345
+      - POSTGRES_USER=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    
+  client:
+    container_name: 'mn-client'
+    image: mn-client
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+
+    
+  server: 
+    container_name: 'mn-server'
+    image: mn-server
+    build: 
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
+    depends_on:
+      - client
+
+volumes:
+  pgdata: {}

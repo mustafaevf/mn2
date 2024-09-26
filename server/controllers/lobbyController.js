@@ -3,7 +3,7 @@ const { randomUUID } = require('crypto');
 
 exports.getLobbies = async(req, res) => {
     try {
-        const lobbies = await Lobby.findAll();
+        const lobbies = await Lobby.findAll({where: {status: 0}});
         const result = await Promise.all(
             lobbies.map(async (lobby) => {
                 const users_id = await LobbyUser.findAll({ where: { lobbyId: lobby.id } });
@@ -37,6 +37,7 @@ exports.getUsers = async (req, res) => {
 
 
 exports.createLobby = async(req, res) => {
+    console.log('createLobby')
     const userId = req.user.id;
     const {max_person, platformId} = req.body;
     if(!max_person || !platformId || !userId) {
@@ -52,7 +53,8 @@ exports.createLobby = async(req, res) => {
     }
 
     try {
-        const createdLobby = await Lobby.create({uuid:  randomUUID(), max_person: max_person, status: 0, platformId: platformId, userId: userId});
+        console.log(randomUUID());
+        const createdLobby = await Lobby.create({uuid:  randomUUID(), max_person: max_person, status: 0, platformId: platformId, userId: userId, createdAt: new Date(), updatedAt: new Date()});
         await LobbyUser.create({userId: userId, lobbyId: createdLobby.id});
         res.status(200).json({createdLobby});
     } catch(error) {
@@ -108,21 +110,13 @@ exports.startLobby = async (req, res) => {
         return res.json({ message: 'max_person' });
     }
 
-    const board = await Board.create({uuid: randomUUID(), status: 0, lobbyId: lobbyUsers.lobbyId});
+    // const board = await Board.create({uuid: randomUUID(), status: 0, lobbyId: lobbyUsers.lobbyId});
     
-    if (board) {
-        await Promise.all(
-            lobbyUsers.map(lu => 
-                BoardUser.create({
-                    socketId: "",
-                    userId: lu.userId,
-                    boardId: board.id
-                })
-            )
-        );
-    }
+    currentLobby.status = 1;
 
-    return res.json({board});
+    await currentLobby.save();
+
+    return res.json({currentLobby});
 
 };
 
