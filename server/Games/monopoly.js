@@ -1,5 +1,6 @@
 const Fields = require('./Field');
 const Player = require('./Player');
+const messages = require('./messages');
 
 games = [];
 

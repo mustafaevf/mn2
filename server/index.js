@@ -7,17 +7,15 @@ const socketIo = require('socket.io');
 const connection = require('./config/connection')
 const path = require('path');
 // const Userk = require('./Models/User')
-const { Lobby, BoardUser, Board, User, LobbyUser } = require('./associations')
-const lobbyRoutes = require('./routes/lobbyRoutes')
-const authRoutes = require('./routes/authRoutes');
-const platformRoutes = require('./routes/platformRoutes');
-const userRoutes = require('./routes/userRoutes');
-const boardRoutes = require('./routes/boardRoutes');
+const { Lobby, BoardUser, Board, User, LobbyUser, Item } = require('./associations')
+const lobbyRoutes = require('./routes/lobby.routes')
+const authRoutes = require('./routes/auth.routes');
+const platformRoutes = require('./routes/platform.routes');
+const userRoutes = require('./routes/user.routes');
+const boardRoutes = require('./routes/board.routes');
+const itemRoutes = require('./routes/item.routes');
 const authMiddleware = require('./middleware/authMiddleware');
-
 const {games, Game, Player} = require('./Games/monopoly');
-
-// const {uuid} = require('uuid');
 
 const app = express();
 const server = http.createServer(app);
@@ -35,17 +33,16 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE'], 
   }));
 
-
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api', lobbyRoutes);
 app.use('/api', platformRoutes);
 app.use('/api', userRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api', boardRoutes);
-
+app.use('/api', itemRoutes);
 
 io.of('api/plays').on('connection', (socket) => {
-  console.log('New client connected ' + socket.id);
+console.log('New client connected ' + socket.id);
   
   socket.on('client_init', async () => {
     
@@ -78,7 +75,7 @@ io.of('api/plays').on('connection', (socket) => {
         current_game.broadcastMessage("Start game");    
         current_game.startGame();    
       }
-      // console.log(current_game);
+      console.log(current_game);
       console.log("metka");
       current_game._update();
 
@@ -93,6 +90,7 @@ io.of('api/plays').on('connection', (socket) => {
     const lobbyUser = await LobbyUser.findOne({ where: { userId: data.user.id } });
     if (lobbyUser) {
       const current_game = games.find((game) => game.id === lobbyUser.lobbyId);
+      console.log(current_game);
       current_game.rollDice();
     }
   });
@@ -150,8 +148,6 @@ io.of('api/plays').on('connection', (socket) => {
     }
   });
 
-
-
     socket.on('disconnect', () => {
       console.log('Client disconnected');
   });
@@ -164,7 +160,7 @@ connection.authenticate()
     server.listen(8080, () => {
       console.log('server started http://127.0.0.1:8080/');
     });
-    return connection.sync({ alter: false });
+    return connection.sync({ alter: true });
   })
   .then(() => {
     console.log('Синхронизация моделей прошла успешно.');

@@ -104,7 +104,6 @@ export default function Lobby({ id, max_person, createdAt, ownerId }) {
           );
         }
       }
-      // console.log(users);
     }
     return result_users;
   }
@@ -133,7 +132,7 @@ export default function Lobby({ id, max_person, createdAt, ownerId }) {
           <div className="game_header mb-1">
             
           </div>
-          <h3>Настры</h3>
+          .
         </>
 
       )}

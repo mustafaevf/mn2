@@ -7,6 +7,7 @@ import UserPage from './pages/User';
 import AuthModal from './components/Modals/AuthModal';
 import { useState } from 'react';
 import Board from './pages/Board';
+import Market from './pages/Market';
 
 function App() {
   
@@ -36,6 +37,9 @@ function App() {
             <Route path='/register' element={<RegisterPage />} />
             <Route path='/users/:id' element={<UserPage />} />
             <Route path='/board/:uuid' element={<Board />} />
+            <Route path='/market' element={<Market />} />
+            {/* <Route path='/admin/users' element={<} />
+            <Route path='/admin/items' element={<} /> */}
           </Routes>
         </div>
       ) : (

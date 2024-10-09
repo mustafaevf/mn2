@@ -44,6 +44,14 @@ export const useAuthStore = create(
         }
       },
 
+      logout: async () => {
+        try {
+          set({user: null, token: null, isAuth: false, isRegister: false});
+        } catch (error) {
+          console.log(error);
+        }
+      }
+
     }),
     {
       name: 'auth-storage', // storage key

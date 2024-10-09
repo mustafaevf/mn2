@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useAuthStore } from '../store/authStore'
 import { useParams } from 'react-router';
 import Button from '../components/Button';
+import Item from '../components/User/Item';
 
 export default function User() {
     const { id } = useParams(); 
@@ -83,7 +84,7 @@ export default function User() {
                         <div className={`user-ch ${activeTab === 'friends' ? 'active' : ''}`} onClick={() => handleTabClick('friends')}>
                             Друзья
                         </div>
-                        { queryUser.id === user.id ?
+                        { user && queryUser.id === user.id ?
                             <div className={`user-ch ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => handleTabClick('settings')}>
                             Настройки
                         </div> : ''}
@@ -93,14 +94,8 @@ export default function User() {
                             ( 
                             <>
                                 <div className="user-wrapper-inventory mt-1">
-                                    <div className="item-box light-bg">
-                                        <div className="item-body">
-                                            <img src="https://m1.dogecdn.wtf/fields/brands/6_food/sbarro.svg" alt="" />
-                                        </div>
-                                        <div className="item-bottom">
-                                            Хуйня 1
-                                        </div>
-                                    </div>
+                                    <Item title={'Хуйня 1'} image={'https://m1.dogecdn.wtf/fields/brands/6_food/sbarro.svg'} type={'container'}/>
+                                    
                                 </div>
                             </>
                         )}

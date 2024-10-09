@@ -155,7 +155,7 @@ export default function Board() {
                 callUserEvent("Твой ход", "Бросай куб", actions);
             } else if(message == 'buyProperty') {
                  const actions = [{
-                    title: 'Купить',
+                    title: 'Купить',    
                     func: buyProperty
                 }, {title: 'Аукцион', func: clickTest}]
                 callUserEvent("Покупка недви", "", actions);
@@ -166,11 +166,12 @@ export default function Board() {
 
         const getStatus = async () => {
             const response = await axios.get(`http://localhost:8080/api/board/${uuid}/status`);
+            console.log(response);
             setBoard(response.data.board);
             setUsers(response.data.users);
             if(isAuth) {
                 const currentUser = response.data.users.find(u => u.user.id === user.id);
-                if(response.data.board.status == 0) {
+                if(response.data.board.status == 1) {
                     s.emit("connected", {user});
                 }
             }

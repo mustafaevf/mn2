@@ -91,6 +91,20 @@ exports.leaveLobby = async (req, res) => {
 
 };
 
+// const checkConnections = async (lobbyId) => {
+//     const lobbyUsers = await LobbyUser.findAll({where: {lobbyId: lobbyId}});
+//     const currentLobby = await Lobby.findByPk(lobbyId);
+
+//     const hasConnectedUsers = true;
+
+//     console.log('check connection');
+//     if (hasConnectedUsers) {
+//         console.log('update status ' + lobbyId);
+//         console.log(currentLobby);
+//         await currentLobby.update({status: 2});
+//         // await currentLobby.save();
+//     }
+// };
 
 exports.startLobby = async (req, res) => {
     const lobbyId = req.params.id;
@@ -111,10 +125,14 @@ exports.startLobby = async (req, res) => {
     }
 
     // const board = await Board.create({uuid: randomUUID(), status: 0, lobbyId: lobbyUsers.lobbyId});
-    
+    console.log('start lobby');
     currentLobby.status = 1;
 
+    
     await currentLobby.save();
+    // setTimeout(() => {
+    //     checkConnections(lobbyId);
+    // }, 5000)
 
     return res.json({currentLobby});
 

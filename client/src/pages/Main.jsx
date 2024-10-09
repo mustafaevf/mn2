@@ -84,7 +84,7 @@ export default function Main() {
               </div>
             </div> */}
             
-            {/* {isAuth && (
+            {isAuth && (
               <div className="waitLobby mt-1">
                 <div className="box light-bg">
                   <div className="game_header mb-1">
@@ -99,7 +99,7 @@ export default function Main() {
                   </div>
                 </div>
               </div>
-            )} */}
+            )}
             <div className="list box bg">
               <div className="right_menu" style={{textAlign: 'right'}}>
                 <Button name={"Создать игру"} clickHandle={openModalCreateLobby}/>

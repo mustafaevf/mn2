@@ -11,8 +11,3 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 } */
-@font-face {
-	font-family: 'Gilroy';
-	src: url('./Gilroy-Light.otf') format('otf');
-	/* src: local('Gilroy-Light'), url('Gilroy-Light.otf') format('otf'); */
-}

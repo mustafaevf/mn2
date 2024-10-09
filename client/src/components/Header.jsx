@@ -4,7 +4,7 @@ import { useAuthStore } from '../store/authStore';
 import { Link } from 'react-router-dom';
 
 export default function Header({openAuthModal}) {
-  const {user, isAuth} = useAuthStore();  
+  const {user, isAuth, logout} = useAuthStore();  
   const [userPopup, setUserPopup] = useState(false);
   return (
     <header>
@@ -39,7 +39,7 @@ export default function Header({openAuthModal}) {
                           Профиль
                         </div>
                       </Link>
-                      <div className="user-header-popup_item">
+                      <div className="user-header-popup_item" onClick={() => logout()}>
                         Выйти
                       </div>
                     </div>  
