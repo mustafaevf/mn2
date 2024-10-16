@@ -27,21 +27,133 @@ a, a:hover {
 header {
 	background-color: #0d0e10;
 	border-bottom: 1px solid #1c1e21;
-	height: 4.5rem;
+	/* height: 4.5rem; */
 }
 .header-container {
 	height: 100%;
-	max-width: 60rem;
+	max-width: 90rem;
 	margin-left: auto;
     margin-right: auto;
-	padding-bottom: .9rem;
-	padding-top: .9rem;
+	padding-bottom: .6rem;
+	padding-top: .6rem;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 }
+
+.user-item {
+	cursor: pointer;
+}
+.user-header {
+	display: flex;
+	position: relative;
+	align-items: center;
+	gap: 2rem;
+}
+.user-avatar {
+	background: linear-gradient(45deg, #D96BF7, #8770FE);
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+	border-radius: 100%;
+	padding: .1rem;
+}
+.user-avatar {
+	width: 100%;
+	height: 100%;
+}
+.user-header-popup_item {
+	cursor: pointer;
+}
+.user-wrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+}
+.user-stat {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	gap: .4rem;
+}
+.user-wrapper_avatar {
+	display: flex;
+	background: linear-gradient(45deg, #D96BF7, #8770FE);
+	border-radius: 100%;
+	padding: .1rem;
+}
+.user-wrapper-ch {
+	display: flex;
+	align-items: center;
+}
+.user-ch {
+	padding-bottom: 1rem;
+	padding-left: 3rem;
+	padding-right: 3rem;
+	cursor: pointer;
+}
+.item-box {
+	text-align: center;
+	width: 150px;
+	border-top-left-radius: .3rem;
+	border-top-right-radius: .3rem;
+}
+.item-body {
+	padding: 1rem;
+	
+}
+.user-wrapper-inventory {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, 150px);
+}
+.item-bottom {
+	text-align: center;
+	padding: .4rem;
+	background: blue;
+	border-bottom-left-radius: .3rem;
+	border-bottom-right-radius: .3rem;
+}
+.user-ch.active {
+    border-bottom: 3px solid; /* Set a solid border */
+    border-image: linear-gradient(45deg, #D96BF7, #8770FE) 1; /* Apply the gradient */
+}
+.user-wrapper_stats {
+	display: flex;
+	gap: 2rem;
+}
+.line {
+	width: .3px;
+	background: #8080805e;
+}
+.user-wrapper_avatar img {
+	
+	width: 100px;
+	height: 100px;
+	border-radius: 100%;
+}
+.user-header-popup {
+	display: flex;
+	flex-direction: column;
+	gap: .6rem;
+	position: absolute;
+    /* background: #fff; */
+	background: #0d0e10;
+	border: 1px solid #1c1e21;
+    
+    top: 60px;
+    right: -30px;
+}
+.user-avatar img {
+	width: 40px;
+	height: 40px;
+	border-radius: 100%;
+}
+::-webkit-scrollbar {
+	width: 1px;
+}
 .wrapper {
-	max-width: 70rem;
+	max-width: 90rem;
 	margin-left: auto;
     margin-right: auto;
 	margin-top: 1rem;
@@ -75,7 +187,8 @@ header {
 	align-items: center;
 }
 button {
-	background: #7856f7;
+	/* background: #7856f7; */
+	background: linear-gradient(45deg, #D96BF7, #8770FE);
 	border-radius: .75rem;
 	outline: none;
 	color: #fff;
@@ -84,6 +197,11 @@ button {
 	font-weight: 700;
 	font-size: 1rem;
 	cursor: pointer;
+}
+.main {
+	display: grid;
+	grid-template-columns: 1fr 4fr;
+	gap: 2rem;
 }
 .a-btn {
 	background: #27292b;

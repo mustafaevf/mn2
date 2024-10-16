@@ -1,29 +1,29 @@
 const { DataTypes } = require('sequelize')
 const connection = require('../config/connection')
 
-const Lobby = connection.define('lobby', {
+const Item = connection.define('item', {
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true, 
         primaryKey: true,
         allowNull: false
     },
-    uuid: {
+    title: {
         type: DataTypes.STRING,
-        allowNull: true
+        allowNull: false,
     },
-    max_person: {
-        type: DataTypes.INTEGER,
-        allowNull: false
+    image: {
+        type: DataTypes.STRING,
+        allowNull: false,
     },
-    status: {
-        type: DataTypes.INTEGER,
-        allowNull: false
+    type: {
+        type: DataTypes.STRING,
+        allowNull: false,
     },
     settings: {
         type: DataTypes.JSON,
         allowNull: true,
-    }
+    },
 });
 
-module.exports = Lobby;
+module.exports = Item;

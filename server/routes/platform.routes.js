@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const platformController = require('../controllers/platformController');
+const platformController = require('../controllers/platform.controller');
 
 router.post('/platform', platformController.createPlatform);
 router.get('/platform/:id', platformController.getPlatform);
