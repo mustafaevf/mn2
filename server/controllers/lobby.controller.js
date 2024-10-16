@@ -4,19 +4,7 @@ const { randomUUID } = require('crypto');
 exports.getLobbies = async(req, res) => {
     try {
         const lobbies = await Lobby.findAll({where: {status: 0}});
-        const result = await Promise.all(
-            lobbies.map(async (lobby) => {
-                const users_id = await LobbyUser.findAll({ where: { lobbyId: lobby.id } });
-                const users = await Promise.all(
-                    users_id.map(async (user_id) => {
-                        const user = await User.findByPk(user_id.userId);
-                        return user;
-                    })
-                );
-                return { lobby, users };
-            })
-        );
-        res.status(200).json(result);
+        res.status(200).json(lobbies);
     } catch(error) {
         res.status(500).json({message: error.message});
     }
