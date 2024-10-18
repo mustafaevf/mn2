@@ -12,7 +12,7 @@ const { Player, Game, Fields } = require('../Games/monopoly')
 exports.getStatus = async (req, res) => {
     const uuid = req.params.uuid
     try {
-        const response = await Lobby.findOne({ where: { uuid: uuid } })
+        const response = await Lobby.findneO({ where: { uuid: uuid } })
         if (!response) {
             return res.json({ message: 'not founde' })
         }
@@ -34,6 +34,3 @@ exports.getStatus = async (req, res) => {
     }
 }
 
-exports.getFields = async (req, res) => {
-    res.json(Fields)
-}

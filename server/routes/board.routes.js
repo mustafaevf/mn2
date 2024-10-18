@@ -5,7 +5,6 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 
 router.get('/board/:uuid/status', boardController.getStatus);
-router.get('/board/fields', boardController.getFields);
 
 
 module.exports = router;

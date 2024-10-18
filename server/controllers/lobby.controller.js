@@ -5,6 +5,7 @@ const {
     LobbyUser,
 } = require('../associations');
 const { randomUUID } = require('crypto');
+const { Fields } = require('../Games/monopoly')
 
 exports.getLobbies = async (req, res) => {
     try {
@@ -135,3 +136,7 @@ exports.getLobby = async (req, res) => {
     const lobby = await Lobby.findByPk(lobbyId);
     res.status(200).json(lobby);
 };
+
+exports.getFields = async (req, res) => {
+    res.json(Fields)
+}
