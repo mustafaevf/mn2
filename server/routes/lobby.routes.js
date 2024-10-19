@@ -4,12 +4,12 @@ const lobbyController = require('../controllers/lobby.controller');
 const authMiddleware = require('../middleware/authMiddleware');
 
 router.get('/lobbies', lobbyController.getLobbies);
-router.post('/lobby', authMiddleware, lobbyController.createLobby);
-router.get('/connect/:id', authMiddleware, lobbyController.connectLobby);
-router.get('/leave/:id', authMiddleware, lobbyController.leaveLobby);
+router.post('/lobbies', authMiddleware, lobbyController.createLobby);
+router.get('/lobbies/:id/connect', authMiddleware, lobbyController.connectLobby);
+router.get('/lobbies/:id/disconnect', authMiddleware, lobbyController.disconnectLobby);
 router.get('/waitLobby', authMiddleware, lobbyController.waitLobby);
-router.get('/lobby/:id/info/users', lobbyController.getUsers);
-router.get('/lobby/:id/start', authMiddleware, lobbyController.startLobby);
-router.get('/lobby/:id/info/board', lobbyController.getFields);
+router.get('/lobbies/:id/info/users', lobbyController.getUsers);
+router.get('/lobbies/:id/start', authMiddleware, lobbyController.startLobby);
+router.get('/lobbies/:id/info/fields', lobbyController.getFields);
 
 module.exports = router;

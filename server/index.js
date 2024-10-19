@@ -24,13 +24,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
     cors({
-        origin: 'http://localhost:3000',
+        origin: ['http://localhost:3000', '127.0.0.1:3000'],
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
     })
 );
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api', loggerMiddleware, routes);
+// app.use('/api', routes);
 
 monopolySockets(io);
 

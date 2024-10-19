@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import Button from '../Button'
-import Input from '../Input';
+import Button from '../common/Button'
+import Input from '../common/Input';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';

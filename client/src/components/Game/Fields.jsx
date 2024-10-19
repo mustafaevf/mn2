@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react';
 import { useAuthStore } from '../../store/authStore';
-import Button from '../Button';
+import Button from '../common/Button';
 
 export default function Fields({fields, users, pawnProperty, buybackProperty, upgradeProperty}) {
     console.log(fields);

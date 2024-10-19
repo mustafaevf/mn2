@@ -10,6 +10,7 @@ module.exports = function (req, res, next) {
         if(!token) {
             return res.status(403).json({message: "dsada"});
         } 
+        // console.log(req.headers.authorization);
 
         const decoded = jwt.verify(token, "123123");
         req.user = decoded;

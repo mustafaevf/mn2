@@ -77,7 +77,7 @@ exports.connectLobby = async (req, res) => {
     }
 };
 
-exports.leaveLobby = async (req, res) => {
+exports.disconnectLobby = async (req, res) => {
     const lobbyId = req.params.id;
     const user = req.user;
     const existLobbyUser = await LobbyUser.findOne({
