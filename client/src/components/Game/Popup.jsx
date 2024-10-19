@@ -1,5 +1,5 @@
 import React from 'react'
-import Button from '../Button'
+import Button from '../common/Button'
 
 export default function Popup({title, description, actions}) {
     console.log(actions);

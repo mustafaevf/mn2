@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import { useAuthStore } from '../store/authStore'
 import { useParams } from 'react-router';
-import Button from '../components/Button';
+import Button from '../components/common/Button';
 import Item from '../components/User/Item';
 
 export default function User() {

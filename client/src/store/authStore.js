@@ -54,8 +54,8 @@ export const useAuthStore = create(
 
     }),
     {
-      name: 'auth-storage', // storage key
-      getStorage: () => localStorage, // define storage (e.g., localStorage)
+      name: 'auth-storage', 
+      getStorage: () => localStorage, 
     }
   )
 );

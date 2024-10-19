@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Button from '../Button';
+import Button from '../common/Button';
 import { useAuthStore } from '../../store/authStore';
 import axios from 'axios';
 
@@ -10,7 +10,7 @@ export default function CreateLobbyModal({openModal, state}) {
 
     const handleCreateLobby = async () => {
         await check();
-        const response = await axios.post('http://localhost:8080/api/lobby', {max_person: maxPerson, platformId: 1});
+        const response = await axios.post('http://localhost:8080/api/lobbies', {max_person: maxPerson, platformId: 1});
         console.log(response)
         openModal();
     };
