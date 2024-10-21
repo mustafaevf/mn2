@@ -11,5 +11,6 @@ router.get('/waitLobby', authMiddleware, lobbyController.waitLobby);
 router.get('/lobbies/:id/info/users', lobbyController.getUsers);
 router.get('/lobbies/:id/start', authMiddleware, lobbyController.startLobby);
 router.get('/lobbies/:id/info/fields', lobbyController.getFields);
+// router.get('/lobbies/:uuid/')
 
 module.exports = router;

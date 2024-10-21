@@ -31,7 +31,6 @@ export default function CreateLobbyModal({openModal, state}) {
                     </div>
                     
                    <Button name="Создать" clickHandle={handleCreateLobby}/>
-                   
                 </div>
             </div>
         </div>

@@ -4,7 +4,7 @@ const boardController = require('../controllers/board.controller');
 const authMiddleware = require('../middleware/authMiddleware');
 
 
-router.get('/board/:uuid/status', boardController.getStatus);
+router.get('/boards/:uuid/info/status', boardController.getStatus);
 
 
 module.exports = router;

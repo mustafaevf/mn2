@@ -12,7 +12,7 @@ const { Player, Game, Fields } = require('../Games/monopoly')
 exports.getStatus = async (req, res) => {
     const uuid = req.params.uuid
     try {
-        const response = await Lobby.findneO({ where: { uuid: uuid } })
+        const response = await Lobby.findOne({ where: { uuid: uuid } })
         if (!response) {
             return res.json({ message: 'not founde' })
         }
@@ -21,6 +21,7 @@ exports.getStatus = async (req, res) => {
             where: { lobbyId: response.id },
         })
 
+        console.log('col');
         const users = await Promise.all(
             lobby_users.map(async (lobby_user) => {
                 const user = await User.findByPk(lobby_user.userId)
@@ -28,7 +29,8 @@ exports.getStatus = async (req, res) => {
             })
         )
 
-        return res.json({ board: response, users: users })
+
+        return res.json({ board: response, users })
     } catch (error) {
         return res.json({ message: error })
     }
