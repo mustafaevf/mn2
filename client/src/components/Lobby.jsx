@@ -152,7 +152,7 @@ export default function Lobby({ id, max_person, createdAt, ownerId }) {
                 <div className="game_title">
                     Игра №{id}
                     <div className="game_title-admin">
-                        {isAuth && ownerId == user.id && (
+                        {isAuth && ownerId == user.id && users.length === max_person && (
                             <Button
                                 name="Начать игру"
                                 clickHandle={handleClickStartLobby}
@@ -164,7 +164,7 @@ export default function Lobby({ id, max_person, createdAt, ownerId }) {
             <div className="game_body mt-2 mb-1">{getUsers()}</div>
             {isAuth && ownerId == user.id && (
                 <>
-                    <div className="game_header mb-1"></div>.
+                    <div className="game_header mb-1"></div>
                 </>
             )}
         </div>
