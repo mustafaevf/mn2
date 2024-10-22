@@ -1,15 +1,13 @@
-const {
-    Lobby,
-    Platform,
-    User,
-    LobbyUser,
-} = require('../associations');
+const { Lobby, Platform, User, LobbyUser } = require('../associations');
 const { randomUUID } = require('crypto');
-const { Fields } = require('../Games/monopoly')
+const { Fields } = require('../Games/Game');
+const { Op } = require('sequelize');
 
 exports.getLobbies = async (req, res) => {
     try {
-        const lobbies = await Lobby.findAll({ where: { status: 0 || 1} });
+        const lobbies = await Lobby.findAll({
+            where: { status: { [Op.or]: [0, 1] } },
+        });
         res.status(200).json(lobbies);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -113,7 +111,7 @@ exports.startLobby = async (req, res) => {
         return res.json({ message: 'max_person' });
     }
 
-    currentLobby.status = 1;
+    currentLobby.status = 2;
 
     await currentLobby.save();
     return res.json({ currentLobby });
@@ -138,5 +136,5 @@ exports.getLobby = async (req, res) => {
 };
 
 exports.getFields = async (req, res) => {
-    res.json(Fields)
-}
+    res.json(Fields);
+};

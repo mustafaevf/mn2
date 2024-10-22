@@ -15,6 +15,7 @@ interface Lobby {
     uuid: string,
     max_person: number;
     userId: number;
+    status: number;
     createdAt: string;
 }
 
@@ -74,7 +75,7 @@ export default function Main() {
                     <div className="list box bg"></div>
                 </div>
                 <div className="main-right">
-                    {isAuth && waitLobby && (
+                    {isAuth && waitLobby && waitLobby.status === 2 &&(
                         <div className="waitLobby mt-1">
                             <div className="box light-bg">
                                 <div className="game_header mb-1">

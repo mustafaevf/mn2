@@ -1,4 +1,3 @@
-// Import necessary libraries and types
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router';
@@ -9,8 +8,8 @@ import Popup from '../components/Game/Popup';
 import Player from '../components/Game/Player';
 import DealPopup from '../components/Game/DealPopup';
 import Chat from '../components/Game/Chat';
+import { useNavigate } from 'react-router-dom';
 
-// Define TypeScript types for the entities
 interface User {
    socketId: string;
    user: any;
@@ -56,6 +55,7 @@ interface Property {
 const socket: Socket = io('http://localhost:8080/api/plays');
 
 const Board: React.FC = () => {
+    const navigate = useNavigate();
     const { uuid } = useParams<{ uuid: string }>();
     const { user, isAuth } = useAuthStore();
 
@@ -95,7 +95,7 @@ const Board: React.FC = () => {
         if (!boardState || boardState.length === 0) return;
         
         const lastState = boardState[boardState.length - 1];
-        console.log('Последний элемент:', lastState);
+        // console.log('Последний элемент:', lastState);
 
         const state = boardState.find((bs) => bs.playerId === user.id);
         if (!state) return;
@@ -115,8 +115,6 @@ const Board: React.FC = () => {
         }
     }, [boardState]);
 
-    
-
     useEffect(() => {
         socket.on('update', (data: Game) => (setGame(data)));
 
@@ -131,16 +129,17 @@ const Board: React.FC = () => {
                 : message === 'payTax'
                 ? [{ title: 'Оплатить', func: () => emitEvent('payTax') }]
                 : [];
-            if (actions.length) callUserEvent(message, data.price || '', actions);
+            if (actions.length) { 
+                callUserEvent(message, data.price || '', actions);
+            }
         });
 
         const fetchStatus = async () => {
             try {
                 const { data } = await axios.get(`http://localhost:8080/api/boards/${uuid}/info/status`);
-                console.log(data);
                 setBoard(data.board);
                 setUsers(data.users);
-                if (isAuth && data.board.status === 1) {
+                if (isAuth && data.board.status === 2) {
                     socket.emit('connected', { user });
                 }
             } catch (error) {
@@ -167,11 +166,14 @@ const Board: React.FC = () => {
     }, [uuid, isAuth]);
 
     useEffect(() => {
+        if(game.status === -1) {
+            navigate('/');
+        }
         console.log(game);
         setChats(game.events);
         setPlayers(game.players);
         setBoardState(game.boardState);
-    }, [game]);
+    }, [game, navigate]);
 
     if (!fields) return <div>Загрузка...</div>;
 
@@ -209,8 +211,6 @@ const Board: React.FC = () => {
             <div className="users bg box">
                 {users && players &&(
                     users.map((us) => {
-                        console.log(us.user);
-                        console.log(players);
                         const player = players.find((p) => p.id === us.user.id);
                         return player ? (
                             <div
@@ -224,7 +224,7 @@ const Board: React.FC = () => {
                                 {showUserPopup && selectedUser?.id === player.id && (
                                     <div className="user-popup">
                                         {selectedUser.id === user.id ? (
-                                            <div className="user-popup-item">Покинуть</div>
+                                            <div className="user-popup-item" onClick={() => emitEvent('leaveGame')}>Покинуть</div>
                                         ) : (
                                             <>
                                                 <div className="user-popup-item">Пожаловаться</div>

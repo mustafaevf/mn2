@@ -3,20 +3,21 @@ const {
     User,
     LobbyUser,
 } = require('../associations');
-const { games, Game } = require('./monopoly');
+const { games, Game } = require('./Game');
 
 module.exports = (io) => {
     io.of('api/plays').on('connection', (socket) => {
-        socket.on('client_init', async () => {});
+        socket.on('client_init', async () => {console.log('Client cnnect')});
     
         socket.on('connected', async (data) => {
+            console.log('connected пошел')
             const lobbyUser = await LobbyUser.findOne({
                 where: { userId: data.user.id },
             });
             if (lobbyUser) {
                 if (!games.find((game) => game.id === lobbyUser.lobbyId)) {
                     const lobby = await Lobby.findByPk(lobbyUser.lobbyId);
-                    var result = new Game(
+                    let result = new Game(
                         lobby.id,
                         lobby.uuid,
                         lobby.max_person,
@@ -142,7 +143,19 @@ module.exports = (io) => {
                 current_game.offerDeal(data.user.id, data.data);
             }
         });
-    
+        
+        socket.on('leaveGame', async (data) => {
+            const lobbyUser = await LobbyUser.findOne({
+                where: { userId: data.user.id },
+            });
+            if (lobbyUser) {
+                const current_game = games.find(
+                    (game) => game.id === lobbyUser.lobbyId
+                );
+                current_game.leaveGame(data.user.id);
+            }
+        });
+
         socket.on('disconnect', () => {
             console.log('Client disconnected');
         });
