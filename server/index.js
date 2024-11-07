@@ -41,7 +41,7 @@ connection
         server.listen(process.env.PORT, () => {
             console.log('server started http://127.0.0.1:8080/');
         });
-        return connection.sync({ alter: false });
+        return connection.sync({ alter: true });
     })
     .then(() => {
         console.log('Синхронизация моделей прошла успешно.');

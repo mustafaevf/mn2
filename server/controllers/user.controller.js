@@ -1,4 +1,5 @@
-const {User} = require('../associations');
+const {Item} = require('../associations');
+const { User, ItemUser } = require('../associations');
 const bcrypt = require('bcryptjs');
 
 exports.getUsers = async (req, res) => {
@@ -10,6 +11,32 @@ exports.getUsers = async (req, res) => {
     }
 }
 
+exports.addItemToUser = async (req, res) => {
+    const userId = req.params.id;
+    const { itemId } = req.body;
+    try {
+        const item = await Item.findByPk(itemId);
+        if (!item) {
+            return res.status(404).json({ message: 'Item not found' });
+        }
+
+        const userItem = await ItemUser.create({ userId, itemId });
+        
+        res.status(200).json(userItem);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+exports.getItems = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const items = await ItemUser.findAll({where: {userId: userId}, include: [{model: Item, attributes: ['id']}]});
+        res.status(200).json(items);
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 exports.getUser = async (req, res) => {
     const userId = req.params.id;

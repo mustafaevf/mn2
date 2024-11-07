@@ -4,7 +4,8 @@ const itemController = require('../controllers/item.controller');
 const authMiddleware = require('../middleware/authMiddleware');
 
 
-router.post('/item', itemController.createItem);
-
+router.post('/items', itemController.createItem);
+router.get('/items', itemController.getItems);
+router.get('/items/:id', itemController.getItem);
 
 module.exports = router;

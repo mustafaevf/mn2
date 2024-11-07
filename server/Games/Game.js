@@ -6,7 +6,7 @@ const { Lobby, LobbyUser } = require('../associations');
 games = [];
 
 class Game {
-    constructor(id, uuid, max_person, io) {
+    constructor(id, uuid, max_person) {
         this.id = id;
         this.uuid = uuid;
         this.max_person = max_person;
@@ -17,7 +17,7 @@ class Game {
         this.currentPlayerIndex = -1;
         this.currentPlayerId = 0;
         this.boardState = [];
-        this.io = io;
+        this.io = null;
         this.colors = ['red', 'green', 'blue', 'yellow'];
 
         // this.customSettings = [
@@ -26,6 +26,10 @@ class Game {
         //   }
 
         // ]
+    }
+
+    _checkConnection() {
+        console.log('_checkConnection');
     }
 
     _findPlayerFor(playerId) {

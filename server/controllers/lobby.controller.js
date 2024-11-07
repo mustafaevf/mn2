@@ -1,7 +1,8 @@
-const { Lobby, Platform, User, LobbyUser } = require('../associations');
+const { Lobby, User, LobbyUser } = require('../associations');
 const { randomUUID } = require('crypto');
 const { Fields } = require('../Games/Game');
 const { Op } = require('sequelize');
+const { games, Game } = require('../Games/Game');
 
 exports.getLobbies = async (req, res) => {
     try {
@@ -16,21 +17,22 @@ exports.getLobbies = async (req, res) => {
 
 exports.getUsers = async (req, res) => {
     const lobbyId = req.params.id;
-
     const users_id = await LobbyUser.findAll({ where: { lobbyId: lobbyId } });
+
     const users = await Promise.all(
         users_id.map(async (user_id) => {
             const user = await User.findByPk(user_id.userId);
             return user;
         })
     );
+    console.log({...users});
     res.status(200).json({ users });
 };
 
 exports.createLobby = async (req, res) => {
     const userId = req.user.id;
-    const { max_person, platformId } = req.body;
-    if (!max_person || !platformId || !userId) {
+    const { max_person } = req.body;
+    if (!max_person || !userId) {
         return res.status(401).json({ message: 'Fill all parametrs' });
     }
 
@@ -38,16 +40,11 @@ exports.createLobby = async (req, res) => {
         return res.status(402).json({ message: 'User not founded' });
     }
 
-    if (!Platform.findByPk(platformId)) {
-        return res.status(402).json({ message: 'Platform not founded' });
-    }
-
     try {
         const createdLobby = await Lobby.create({
             uuid: randomUUID(),
             max_person: max_person,
             status: 0,
-            platformId: platformId,
             userId: userId,
             createdAt: new Date(),
             updatedAt: new Date(),
@@ -113,6 +110,19 @@ exports.startLobby = async (req, res) => {
 
     currentLobby.status = 2;
 
+    if (!games.find((game) => game.id === lobbyId)) {
+        const lobby = await Lobby.findByPk(lobbyId);
+        let _game = new Game(
+            currentLobby.id,
+            currentLobby.uuid,
+            currentLobby.max_person
+        );
+
+        games.push(_game);
+        setTimeout(() => {
+            _game._checkConnection();
+        }, 60000);
+    }
     await currentLobby.save();
     return res.json({ currentLobby });
 };

@@ -5,8 +5,8 @@ const authMiddleware = require('../middleware/authMiddleware');
 
 router.get('/lobbies', lobbyController.getLobbies);
 router.post('/lobbies', authMiddleware, lobbyController.createLobby);
-router.get('/lobbies/:id/connect', authMiddleware, lobbyController.connectLobby);
-router.get('/lobbies/:id/disconnect', authMiddleware, lobbyController.disconnectLobby);
+router.put('/lobbies/:id/connect', authMiddleware, lobbyController.connectLobby);
+router.put('/lobbies/:id/disconnect', authMiddleware, lobbyController.disconnectLobby);
 router.get('/waitLobby', authMiddleware, lobbyController.waitLobby);
 router.get('/lobbies/:id/info/users', lobbyController.getUsers);
 router.get('/lobbies/:id/start', authMiddleware, lobbyController.startLobby);
