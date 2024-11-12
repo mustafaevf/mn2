@@ -9,5 +9,6 @@ router.get('/users', userController.getUsers);
 router.post('/user/change/password', authMiddleware, userController.changePassword);
 router.get('/users/:id/items', userController.getItems);
 router.post('/users/:id/items', userController.addItemToUser);
+router.post('/users/:id/items/sell', userController.sellItem);
 
 module.exports = router;

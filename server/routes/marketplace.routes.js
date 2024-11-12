@@ -4,7 +4,7 @@ const marketplaceController = require('../controllers/marketplace.controller');
 const authMiddleware = require('../middleware/authMiddleware');
 
 router.get('/marketplace/listings', marketplaceController.getListings);
-router.post('/marketplace/listings', authMiddleware, marketplaceController.createLobby);
+router.post('/marketplace/listings', authMiddleware, marketplaceController.createListings);
 
 // router.get('/lobbies/:uuid/')
 

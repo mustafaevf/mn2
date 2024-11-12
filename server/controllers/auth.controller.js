@@ -2,7 +2,7 @@ const { where } = require('sequelize');
 const User = require('../Models/User');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-
+require('dotenv').config();
 
 exports.login = async(req, res) => {
     const { login, password } = req.body;
@@ -21,7 +21,7 @@ exports.login = async(req, res) => {
             return res.status(400).json({ message: 'Invalid email or password' });
         }
 
-        const token = jwt.sign({ id: candidate.id, login: candidate.login, status: candidate.status, balance: candidate.balance }, "123123", { expiresIn: '1h' });
+        const token = jwt.sign({ id: candidate.id, login: candidate.login, status: candidate.status, balance: candidate.balance }, process.env.SECRET_KEY, { expiresIn: '1h' });
         res.status(200).json({ candidate, token });
 
     } catch(error) {

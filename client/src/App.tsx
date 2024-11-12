@@ -9,7 +9,7 @@ import Button from './components/ui/Button';
 import { useState } from 'react';
 import { useAuthStore } from './stores/authStore';
 import UserPage from './pages/UserPage/UserPage';
-import MarketplacePage from './pages/MarketplacePage';
+import MarketplacePage from './pages/MarketplacePage/MarketplacePage';
 
 function App() {
   const { isOpen: isOpenLoginModal, openModal: openLoginModal, closeModal: closeLoginModal} = useModal();

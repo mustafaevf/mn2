@@ -46,7 +46,6 @@ const UserPage = () => {
         const getItems = async () => {
             try {
                 const data = await fetchItems(Number(userId));
-                console.log(data);
                 setUserItems(data);
             } catch (error) {
                 console.log(error);            

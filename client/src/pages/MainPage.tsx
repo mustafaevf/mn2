@@ -7,6 +7,7 @@ import { useAuthStore } from "../stores/authStore";
 import Button from "../components/ui/Button";
 import client from "../services/client";
 import { ILobby } from "../types/Lobby";
+import { createLobby } from "../services/lobbyService";
 import Checkbox from "../components/ui/Checkbox";
 
 const MainPage = () => {
@@ -18,7 +19,7 @@ const MainPage = () => {
 
   const handleCreateLobby = async () => {
     try {
-      const response = await client.post<ILobby>('lobbies', {max_person: Number(maxPersonInput)});
+      const response = await createLobby(Number(maxPersonInput));
     } catch (error) {
       console.log(error);
     }

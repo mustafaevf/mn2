@@ -17,8 +17,8 @@ Lobby.belongsToMany(User, {through: LobbyUser});
 // User.hasMany(Item);
 // Item.belongsTo(User);
 
-Item.belongsToMany(User, {through: ItemUser});
-User.belongsToMany(Item, {through: ItemUser});
+Item.belongsToMany(User, {through: ItemUser, uniqueKey: false, foreignKey: 'itemId'});
+User.belongsToMany(Item, {through: ItemUser, uniqueKey: false, foreignKey: 'userId'});
 
 Marketplace.belongsTo(User);
 Marketplace.belongsTo(Item);

@@ -8,6 +8,10 @@ const ItemUser = connection.define('item_user', {
         primaryKey: true,
         allowNull: false
     },
+    inSell: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+    },
     
 });
 
