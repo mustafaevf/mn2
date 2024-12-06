@@ -22,14 +22,20 @@ exports.getStatus = async (req, res) => {
         });
 
 
-        const users = await Promise.all(
+        const players = await Promise.all(
             lobby_users.map(async (lobby_user) => {
-                const user = await User.findByPk(lobby_user.userId);
-                return { user, socketId: lobby_user.socketId };
+                const user = await User.findByPk(lobby_user.userId, {attributes: ["id", "login", "balance", "status", "image"]});
+
+                return {...user.toJSON(), socketId: lobby_user.socketId};
             })
         );
 
-        return res.json({ board: response, users });
+        const result = {
+            ...response.toJSON(),
+            players
+        };
+
+        return res.json(result);
     } catch (error) {
         return res.json({ message: error });
     }

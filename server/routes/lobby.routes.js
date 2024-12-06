@@ -7,7 +7,7 @@ router.get('/lobbies', lobbyController.getLobbies);
 router.post('/lobbies', authMiddleware, lobbyController.createLobby);
 router.put('/lobbies/:id/connect', authMiddleware, lobbyController.connectLobby);
 router.put('/lobbies/:id/disconnect', authMiddleware, lobbyController.disconnectLobby);
-router.get('/waitLobby', authMiddleware, lobbyController.waitLobby);
+router.get('/waitlobby', authMiddleware, lobbyController.waitLobby);
 router.get('/lobbies/:id/info/users', lobbyController.getUsers);
 router.get('/lobbies/:id/start', authMiddleware, lobbyController.startLobby);
 router.get('/lobbies/:id/info/fields', lobbyController.getFields);

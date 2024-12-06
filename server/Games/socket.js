@@ -2,9 +2,14 @@ const { Lobby, User, LobbyUser } = require('../associations');
 const { games, Game } = require('./Game');
 
 module.exports = (io) => {
-    io.of('api/plays').on('connection', (socket) => {
+    io.of('api/game').on('connection', (socket) => {
         socket.on('client_init', async () => {
             console.log('Client cnnect');
+        });
+
+        socket.on('get_lobbies', async () => {
+            const lobbies = await Lobby.findAll({where: {status: 1} })
+            io.of('/api/game').emit('lobbies', lobbies);
         });
 
         socket.on('connected', async (data) => {

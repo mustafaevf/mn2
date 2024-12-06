@@ -124,7 +124,7 @@ exports.startLobby = async (req, res) => {
         }, 60000);
     }
     await currentLobby.save();
-    return res.json({ currentLobby });
+    return res.json(currentLobby);
 };
 
 exports.waitLobby = async (req, res) => {
@@ -135,7 +135,7 @@ exports.waitLobby = async (req, res) => {
     });
     if (currentLobby) {
         const lobby = await Lobby.findByPk(currentLobby.lobbyId);
-        return res.status(200).json({ lobby });
+        return res.status(200).json(lobby);
     }
 };
 

@@ -10,5 +10,4 @@ export interface IUser {
     balance: number;
     image: string;
     status: IUserStatus
-    img: string;
 };

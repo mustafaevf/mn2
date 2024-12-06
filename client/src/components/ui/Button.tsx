@@ -12,10 +12,10 @@ const Button = ({
     variant = 'secondary',
 }: ButtonProps) => {
     const baseStyles =
-        'px-4 py-2 rounded-md font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2';
+        'btn-blue h-11 shrink-0 gap-2.5 lg:gap-3 rounded pl-3.5 lg:pl-4.5 pr-3 lg:pr-3.5 text-tiny font-bold  uppercase lg:h-12.5';
 
     const variantStyles = {
-        primary: 'bg-blue-500 text-white hover:bg-blue-600 focus:ring-blue-500',
+        primary: 'btn-blue text-white hover:bg-blue-600 focus:ring-blue-500',
         secondary: 'bg-muted text-white hover:bg-gray-600 focus:ring-gray-500',
         danger: 'bg-red-500 text-white hover:bg-red-600 focus:ring-red-500',
     };

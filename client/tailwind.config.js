@@ -5,16 +5,29 @@ module.exports = {
   ],
   theme: {
     extend: {
-      colors: {
-        background: "#1c1c1c",
-        darkBackground: "#151515",
-        muted: "#c0c1c7",
-        body: "#8e919b",
-        border: "#424244",
-        success: "#1c9749",
-        danger: "#e11d48",
-        warning: "#ffc107",
+      textColor: {
+        primary: "#fff",
+        secondary: "#dae2f5",
+        dop: "#e6eeff",
       },
+      colors: {
+        background: "#161b2e",
+        opacity: "#161b2efc",
+        secondary: "#1b2238",
+        modal: "#1c233a",
+        block: "#242c48",
+        primary: "",
+        white: "#fff",
+        player1: "#df3f4b",
+        player2: "#8845dd",
+        player3: "#50bf36",
+        player4: "#dea921"
+      },
+      borderRadius: {
+        lg: "1.25rem",
+        sm: ".25rem",
+        md: ".75rem"
+      }
     },
   },
   plugins: [],

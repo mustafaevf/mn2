@@ -9,19 +9,18 @@ interface InputProps {
 const Input = ({
     label,
     value,
-    onChange,   
+    onChange, 
+    type='text',
     placeholder,
 }: InputProps) => {
     return (
         <div className="flex flex-col mb-4">
-            <label className="text-sm font-medium text-gray-700 mb-1">
-                {label}
-            </label>
             <input
                 value={value}
+                type={type}
                 onChange={(e) => onChange(e.target.value)}
                 placeholder={placeholder}
-                className="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-5 py-2 rounded bg-background text-sm text-secondary focus:outline-none"
             />
         </div>
     );

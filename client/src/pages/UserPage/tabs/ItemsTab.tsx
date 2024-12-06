@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { IItem } from "../../../types/Item";
 import { createMarketplaceListing } from "../../../services/marketplaceService";
 import Input from "../../../components/ui/Input";
+import Dropdown from "../../../components/ui/Dropdown";
 
 interface ItemsTabProps {
     items: IItem[];
@@ -10,6 +11,8 @@ interface ItemsTabProps {
 const ItemsTab = ({items}: ItemsTabProps) => {
     const [selectedItem, setSelectedItem] = useState<IItem | null>();
     const [priceSelectedItem, setPriceSelectedItem] = useState<string>("");
+    const [titleForSearch, setTitleForSearch] = useState<string>("");
+    const [selectedOption, setSelectedOption] = useState("");
 
     const sellItem = async () => {
     
@@ -23,22 +26,36 @@ const ItemsTab = ({items}: ItemsTabProps) => {
     }
 
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
+        <div className="flex flex-col">
+            <div className="flex justify-between">
+                <Input label="Название" value={titleForSearch} onChange={setTitleForSearch} placeholder="Название"/>
+                <Dropdown
+                    options={["Предметы", "Скины", "Контейнеры"]}
+                    selected={selectedOption}
+                    onSelect={setSelectedOption}
+                    placeholder="Тип"
+                />
+            </div>
+            <div className="grid grow grid-cols-3 place-content-start gap-1.5 overflow-y-auto px-2.5 py-2.5 lg:grid-cols-8 ">
             {items.map((item) => (
                 <div
-                    key={item.id}
-                    className="relative border rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
-                    onClick={() => setSelectedItem(item)}
+                key={item.id}
+                className="relative rounded shadow-md border border-[#323e60] bg-block cursor-pointer overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col items-center pt-4 pb-4"
+                onClick={() => setSelectedItem(item)}
                 >
-                    <img
-                        src={`http://localhost:8080/uploads/${item.image}`}
-                        alt={item.title}
-                        className="w-full h-48 object-cover"
-                    />
-                    <div className="p-4">
-                        <h3 className="text-lg font-semibold text-gray-800">{item.title}</h3>
-                        <p className="text-gray-600 mt-2">Цена: ${item.type}</p>
+                    <div className="flex items-center justify-center w-16 h-16 bg-[#2b3654] rounded-lg mb-4">
+                        <img
+                            src={`http://localhost:8080/uploads/${item.image}`}
+                            alt={item.title}
+                            className="object-contain w-10 h-10"
+                        />
                     </div>
+            
+                    <div className="text-center">
+                        <h3 className="text-lg font-semibold text-primary">{item.title}</h3>
+                        <p className="text-secondary mt-2">Цена: ${item.type}</p>
+                    </div>
+                
                     <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-40 transition-opacity duration-300 flex items-center justify-center text-white opacity-0 hover:opacity-100">
                         <p className="text-lg font-bold">Подробнее</p>
                     </div>
@@ -65,7 +82,10 @@ const ItemsTab = ({items}: ItemsTabProps) => {
                     </div>
                 </div>
             )}
+            </div>
         </div>
+
+        
     );
 };
 

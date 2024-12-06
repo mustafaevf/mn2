@@ -322,7 +322,7 @@ class Game {
         });
         this._update();
         this.io
-            .of('/api/plays')
+            .of('/api/game')
             .to(this.players[this.currentPlayerIndex].socketId)
             .emit('event', event, _params);
     }
@@ -333,7 +333,7 @@ class Game {
     }
 
     _update() {
-        this.io.of('/api/plays').to(this.id).emit('update', {
+        this.io.of('/api/game').to(this.id).emit('update', {
             id: this.id,
             uuid: this.uuid,
             max_person: this.max_person,
