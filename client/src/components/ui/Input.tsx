@@ -20,7 +20,7 @@ const Input = ({
                 type={type}
                 onChange={(e) => onChange(e.target.value)}
                 placeholder={placeholder}
-                className="px-5 py-2 rounded bg-background text-sm text-secondary focus:outline-none"
+                className="px-4 py-4 rounded bg-background text-sm text-secondary focus:outline-none"
             />
         </div>
     );

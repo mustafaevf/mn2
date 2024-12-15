@@ -12,7 +12,7 @@ const Modal = ({ title, isOpen, onClose, children }: ModalProps) => {
 
   return (
     <div className="fixed inset-0 shadow-lg flex items-center justify-center z-50 bg-opacity">
-      <div className="rounded-lg p-6 w-full bg-modal max-w-md relative">
+      <div className="rounded-lg px-4 py-4 w-full bg-modal max-w-md relative">
         <div className="flex justify-between items-center mb-3">
           <div className="title text-lg text-gray-50">
             {title}

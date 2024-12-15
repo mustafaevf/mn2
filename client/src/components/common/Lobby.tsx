@@ -6,6 +6,9 @@ import { useAuthStore } from '../../stores/authStore';
 import Button from '../ui/Button';
 import { fetchUsersFromLobby, connectToLobby, disconnectFromLobby, startLobby } from '../../services/lobbyService';
 import { useNavigate } from 'react-router-dom';
+import useNotification from '../../hooks/useNotifiaction';
+import Notification from '../ui/Notification';
+import { getErrorMessage } from '../../utils/errorUtils';
 
 interface LobbyProps {
     lobby: ILobby; 
@@ -16,6 +19,7 @@ const Lobby = ({lobby, type=1}: LobbyProps) => {
     const navigate = useNavigate();
     const [users, setUsers] = useState<IUser[]>([]);
     const { isAuth, user } = useAuthStore();
+    const { notification, addNotification, removeNotification } = useNotification();
 
     const { id, max_person, uuid, userId, status } = lobby;
 
@@ -60,6 +64,7 @@ const Lobby = ({lobby, type=1}: LobbyProps) => {
             await connectToLobby(id);
         } catch (error) {
             console.log(error);
+            addNotification(getErrorMessage(error), "error");
         }
     }
 
@@ -68,6 +73,7 @@ const Lobby = ({lobby, type=1}: LobbyProps) => {
             await disconnectFromLobby(id);
         } catch (error) {
             console.log(error);
+            addNotification(getErrorMessage(error), "error");
         }
     }
 
@@ -76,7 +82,8 @@ const Lobby = ({lobby, type=1}: LobbyProps) => {
             const data = await startLobby(id);
             navigate(`/boards/${data}`);
         } catch (error) {
-            console.log(error)
+            console.log(error);
+            addNotification(getErrorMessage(error), "error");
         }
     }
 
@@ -105,7 +112,7 @@ const Lobby = ({lobby, type=1}: LobbyProps) => {
                     ) 
                 } */}
             </div>
-            
+            {notification && <Notification message={notification.message} type={notification.type} onClose={removeNotification} />}
         </div>
     );
 };
