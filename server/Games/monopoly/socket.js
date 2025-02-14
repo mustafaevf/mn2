@@ -1,4 +1,4 @@
-const { Lobby, User, LobbyUser } = require('../associations');
+const { Lobby, User, LobbyUser } = require('../../associations');
 const { games, Game } = require('./Game');
 
 module.exports = (io) => {

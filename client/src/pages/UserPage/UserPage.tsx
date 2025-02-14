@@ -1,46 +1,74 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { IUser } from "../../types/User";
-import client from "../../services/client";
-import { useAuthStore } from "../../stores/authStore";
-import ItemsTab from "./tabs/ItemsTab";
-import { IItem } from "../../types/Item";
-import { fetchItems } from "../../services/userService";
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { IUser } from '../../types/User';
+import client from '../../services/client';
+import { useAuthStore } from '../../stores/authStore';
+import ItemsTab from './tabs/ItemsTab';
+import { IItem } from '../../types/Item';
+import { fetchItems } from '../../services/userService';
+import Tabs from '../../components/ui/Tabs';
+import Button from '../../components/ui/Button';
+import Input from '../../components/ui/Input';
 
 type UserPageParams = {
     userId: string;
 };
 
 enum ActiveTab {
-    ITEMS = "items",
-    FRIENDS = "friends",
-    GAMES = "games",
-    SETTINGS = "settings",
-};
+    ITEMS = 'items',
+    FRIENDS = 'friends',
+    GAMES = 'games',
+    SETTINGS = 'settings',
+}
 
 const UserPage = () => {
     const { userId } = useParams<UserPageParams>();
+    const [activeTab, setActiveTab] = useState<string>('Аккаунт');
     const [user, setUser] = useState<IUser>();
-    const [activeTab, setActiveTab] = useState<ActiveTab>(ActiveTab.ITEMS);
     const [userItems, setUserItems] = useState<IItem[]>([]);
+    const [newLogin, setNewLogin] = useState<string>('');
 
     const fetchUser = async () => {
         try {
             const response = await client.get<IUser>(`users/${userId}`);
             setUser(response.data);
         } catch (error) {
-            console.log(error);            
+            console.log(error);
         }
     };
 
     const renderContent = () => {
-        if(activeTab == ActiveTab.ITEMS) {
-            console.log(userItems);
-            if(userItems.length > 0) {
-                return <ItemsTab items={userItems}/>
-            }
+        if (activeTab == 'Настройки') {
+            return (
+                <div className="grid gap-12 grid-cols-4">
+                    <div className="rounded bg-secondary flex flex-col p-4 gap-3.5 w-[400px]">
+                        <div className="text-xs font-medium uppercase text-secondary">Аватар</div>
+                        <img
+                            className="w-[4rem] h-[4rem] rounded-sm object-cover"
+                            src={`http://localhost:8080/uploads/${user?.image}`}
+                            alt={user?.login}
+                        />
+                        <div className="text-xs font-medium uppercase text-secondary">Новый логин</div>
+                        {user && (
+                            <Input label="" onChange={() => setNewLogin} value={user?.login} placeholder="Логин" />
+                        )}
+                        <Button label="Сохранить" onClick={() => alert('save')} />
+                    </div>
+                    <div className="rounded bg-secondary flex flex-col p-4 gap-3.5 w-[400px]">
+                        <div className="text-xs font-medium uppercase text-secondary">Старый пароль</div>
+                        {user && (
+                            <Input label="" onChange={() => setNewLogin} value="" placeholder="Старый пароль" type='password'/>
+                        )}
+                        <div className="text-xs font-medium uppercase text-secondary">Новый пароль</div>
+                         {user && (
+                            <Input label="" onChange={() => setNewLogin} value="" placeholder="Новый пароль" type='password'/>
+                        )}
+                        <Button label="Сохранить" onClick={() => alert('save')} />
+                    </div>
+                </div>
+            );
         }
-    }
+    };
 
     useEffect(() => {
         const getItems = async () => {
@@ -48,7 +76,7 @@ const UserPage = () => {
                 const data = await fetchItems(Number(userId));
                 setUserItems(data);
             } catch (error) {
-                console.log(error);            
+                console.log(error);
             }
         };
         fetchUser();
@@ -56,77 +84,18 @@ const UserPage = () => {
     }, [userId]);
 
     return (
-        <div className="flex flex-col gap-4 items-center">
-            <div className="rounded bg-secondary ">
-               <ul className="flex">
-                    <li className={`${activeTab == ActiveTab.ITEMS ? 'bg-block': ''} text-dop rounded p-6 pb-4 pt-4 cursor-pointer`} onClick={() => setActiveTab(ActiveTab.ITEMS)}>
-                        Инвентарь
-                    </li>
-                    <li className={`${activeTab == ActiveTab.GAMES ? 'bg-block': ''} text-dop rounded p-6 pb-4 pt-4 cursor-pointer`} onClick={() => setActiveTab(ActiveTab.GAMES)}>
-                        Статистика
-                    </li>
-                    <li className={`${activeTab == ActiveTab.FRIENDS ? 'bg-block': ''} text-dop rounded p-6 pb-4 pt-4 cursor-pointer`} onClick={() => setActiveTab(ActiveTab.FRIENDS)}>
-                        Друзья
-                    </li>
-               </ul>
+        <>
+            <div className="text-primary text-xl font-bold mb-4">Аккаунт</div>
+            <div className="flex flex-col gap-4 text-dark-text">
+                <div className="flex justify-between">
+                    <Tabs activeTab={activeTab} setActiveTab={setActiveTab} tabs={['Аккаунт', 'Настройки', 'Друзья']} />
+                    <Button label="Выйти" onClick={() => alert('exit')} />
+                    {/* Изменить стиль кнопки */}
+                </div>
+                {renderContent()}
             </div>
-            <div className="rounded w-full p-4 bg-secondary">{renderContent()}</div>
-        </div>
-        // <div className="max-w-sm mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
-        //     <div className="flex items-center justify-center p-6 bg-gray-200">
-        //         <img
-        //             className="w-24 h-24 rounded-full object-cover border-2 border-indigo-500"
-        //             src={`http://localhost:8080/uploads/${user?.image}`}
-        //             alt="Profile Picture"
-        //         />
-        //     </div>
-        //     <div className="p-6">
-        //         <h2 className="text-xl font-semibold text-gray-800">{user?.login}</h2>
-        //         <div className="flex mt-4 space-x-4">
-        //         </div>
-        //     </div>
-        //     <div className="mt-4">
-        //         <div className="flex space-x-4 border-b-2 pb-2">
-        //             <button
-        //                 onClick={() => setActiveTab(ActiveTab.ITEMS)}
-        //                 className={`px-4 py-2 ${
-        //                     activeTab === ActiveTab.ITEMS ? "text-indigo-600 border-b-2 border-indigo-600" : "text-gray-500"
-        //                 }`}
-        //             >
-        //                 Предметы
-        //             </button>
-        //             <button
-        //                 onClick={() => setActiveTab(ActiveTab.FRIENDS)}
-        //                 className={`px-4 py-2 ${
-        //                     activeTab === ActiveTab.FRIENDS ? "text-indigo-600 border-b-2 border-indigo-600" : "text-gray-500"
-        //                 }`}
-        //             >
-        //                 Друзья
-        //             </button>
-        //             <button
-        //                 onClick={() => setActiveTab(ActiveTab.GAMES)}
-        //                 className={`px-4 py-2 ${
-        //                     activeTab === ActiveTab.GAMES ? "text-indigo-600 border-b-2 border-indigo-600" : "text-gray-500"
-        //                 }`}
-        //             >
-        //                 Игры
-        //             </button>
-        //             {useAuthStore.getState().isAuth && useAuthStore.getState().user?.id === userId && (
-        //                 <button
-        //                     onClick={() => setActiveTab(ActiveTab.SETTINGS)}
-        //                     className={`px-4 py-2 ${
-        //                         activeTab === ActiveTab.SETTINGS ? "text-indigo-600 border-b-2 border-indigo-600" : "text-gray-500"
-        //                     }`}
-        //                 >
-        //                     Настройки
-        //                 </button>
-        //             )}
-        //         </div>
-        //         <div className="mt-4">{renderContent()}</div>
-        //     </div>
-        // </div>
-
+        </>
     );
-}
+};
 
 export default UserPage;

@@ -1,5 +1,5 @@
 const {Lobby, Platform, User, LobbyUser, Board, BoardUser, Item, ItemUser} = require('../associations');
-const {Player, Game, Fields} = require('../Games/Game');
+const {Player, Game, Fields} = require('../Games/monopoly/Game');
 
 exports.createItem = async(req, res) => {
     try {

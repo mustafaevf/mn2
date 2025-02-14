@@ -41,7 +41,7 @@ const LobbyList = ({}: LobbyListProps) => {
         <div className="grow max-md:contents">
             {
                 isAuth && user && waitLobby && (
-                    <div className="flex flex-col gap-5">
+                    <div className="flex flex-col gap">
                         <Lobby lobby={waitLobby} type={2} />
                     </div>
                 )
@@ -49,7 +49,7 @@ const LobbyList = ({}: LobbyListProps) => {
             {lobbies.length === 0 ? (
                 <p className="text-gray-500">Нет доступных лобби.</p>
             ) : (
-                <div className="flex flex-col gap-5">
+                <div className="flex flex-col gap-3">
                     {lobbies.map((lobby) => (
                         <Lobby lobby={lobby} />
                     ))}

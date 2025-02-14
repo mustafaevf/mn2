@@ -1,8 +1,8 @@
 const { Lobby, User, LobbyUser } = require('../associations');
 const { randomUUID } = require('crypto');
-const { Fields } = require('../Games/Game');
+const { Fields } = require('../Games/monopoly/Field');
 const { Op } = require('sequelize');
-const { games, Game } = require('../Games/Game');
+const { games, Game } = require('../Games/monopoly/Game');
 
 exports.getLobbies = async (req, res) => {
     try {

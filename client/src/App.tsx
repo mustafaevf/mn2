@@ -11,39 +11,58 @@ import { useAuthStore } from './stores/authStore';
 import UserPage from './pages/UserPage/UserPage';
 import MarketplacePage from './pages/MarketplacePage/MarketplacePage';
 import GameBoardPage from './pages/GameBoardPage/GameBoardPage';
+import DoubleGamePage from './pages/DoubleGamePage/DoubleGamePage';
+import MonopolyGamePage from './pages/MonopolyGamePage/MonopolyGamePage';
+import CrashGamePage from './pages/CrashGamePage/CrashGamePage';
+import { NotificationProvider } from './contexts/NotificationContext';
+import Sidebar from './components/Sidebar';
+import MinerGamePage from './pages/MinerGamePage/MinerGamePage';
 
 function App() {
-  const { isOpen: isOpenLoginModal, openModal: openLoginModal, closeModal: closeLoginModal} = useModal();
-  const [loginInput, setLoginInput] = useState<string>("");
-  const [passwordInput, setPasswordInput] = useState<string>("");
-  
-  const handleLogin = async () => {
-    await useAuthStore.getState().login(loginInput, passwordInput);
-    closeLoginModal();
-  }
+    const { isOpen: isOpenLoginModal, openModal: openLoginModal, closeModal: closeLoginModal } = useModal();
+    const [loginInput, setLoginInput] = useState<string>('');
+    const [passwordInput, setPasswordInput] = useState<string>('');
 
-  return (
-    <>
-      <Header onLogin={openLoginModal} />
+    const handleLogin = async () => {
+        await useAuthStore.getState().login(loginInput, passwordInput);
+        closeLoginModal();
+    };
 
-      <div className="mx-auto w-full min-h-[calc(100vh-10rem)] lg:min-h-[calc(100vh-7rem)] flex flex-col lg:w-[1200px] pb-[300px]">
- 
-        <Routes>
-          <Route path='/' element={<MainPage />} />
-          <Route path='/users/:userId' element={<UserPage />} />
-          <Route path='/marketplace' element={<MarketplacePage />} />
-          <Route path='/boards/:uuid' element={<GameBoardPage />} />
-        </Routes>
+    return (
+        <NotificationProvider>
+            <Header onLogin={openLoginModal} />
+            <div className="flex h-screen">
+                <Sidebar />
+                <div className="flex flex-col flex-grow p-8 mt-8 ml-8 mr-8">
+                    <Routes>
+                        <Route path="/" element={<MainPage />} />
+                        <Route path="/games/monopoly" element={<MonopolyGamePage />} />
+                        <Route path="/games/double" element={<DoubleGamePage />} />
+                        <Route path="/games/crash" element={<CrashGamePage />} />
+                        <Route path="/games/miner" element={<MinerGamePage />} />
+                        <Route path="/monopoly" element={<MainPage />} />
+                        <Route path="/users/:userId" element={<UserPage />} />
+                        <Route path="/marketplace" element={<MarketplacePage />} />
+                        <Route path="/boards/:uuid" element={<GameBoardPage />} />
+                    </Routes>
+                </div>
+            </div>
 
-        <Modal title="Авторизация" isOpen={isOpenLoginModal} onClose={closeLoginModal}>
-          <Input label="Логин" value={loginInput} onChange={setLoginInput} placeholder="Логин" />
-          <Input label="Пароль"  value={passwordInput} onChange={setPasswordInput} placeholder="Пароль" type='password'/>
-          <Button label="Авторизация" onClick={handleLogin} />
-        </Modal>
-      </div>
-    </>
-    
-  );
+            <Modal title="Авторизация" isOpen={isOpenLoginModal} onClose={closeLoginModal}>
+                <div className="flex flex-col gap-4">
+                    <Input label="Логин" value={loginInput} onChange={setLoginInput} placeholder="Логин" />
+                    <Input
+                        label="Пароль"
+                        value={passwordInput}
+                        onChange={setPasswordInput}
+                        placeholder="Пароль"
+                        type="password"
+                    />
+                    <Button label="Авторизация" onClick={handleLogin} />
+                </div>
+            </Modal>
+        </NotificationProvider>
+    );
 }
 
 export default App;

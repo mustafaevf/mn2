@@ -1,4 +1,4 @@
-/** @type {import('tailwindcss').Config} */
+// @type {import('tailwindcss').Config}
 module.exports = {
   content: [
     './src/**/*.{js,jsx,ts,tsx}',
@@ -7,26 +7,35 @@ module.exports = {
     extend: {
       textColor: {
         primary: "#fff",
-        secondary: "#dae2f5",
-        dop: "#e6eeff",
+        secondary: "#abb2cf",
       },
       colors: {
         background: "#161b2e",
-        opacity: "#161b2efc",
-        secondary: "#1b2238",
-        modal: "#1c233a",
-        block: "#242c48",
-        primary: "",
-        white: "#fff",
-        player1: "#df3f4b",
-        player2: "#8845dd",
-        player3: "#50bf36",
-        player4: "#dea921"
+        header: "#141414",
+        ui: "#232c48",
+        secondary: "#1e253d",
+        opacity: "rgba(15, 20, 28, .75)",
+        hover: "#232c48",
+        box: "#262f4c",
+        box2: "#1c233a",
+        border: "#2f3959",
+        icon: "#737373",
       },
       borderRadius: {
         lg: "1.25rem",
-        sm: ".25rem",
+        sm: "10px",
         md: ".75rem"
+      },
+      fontSize: {
+        xs: "0.75rem",  // 12px
+        sm: "0.875rem", // 14px
+        base: "1rem",   // 16px (по умолчанию)
+        lg: "1.125rem", // 18px
+        xl: "1.25rem",  // 20px
+        "2xl": "1.5rem",  // 24px
+        "3xl": "1.875rem", // 30px
+        "4xl": "2.25rem",  // 36px
+        "5xl": "3rem",     // 48px
       }
     },
   },

@@ -7,7 +7,7 @@ const {
     BoardUser,
 } = require('../associations');
 const { randomUUID } = require('crypto');
-const { Player, Game, Fields } = require('../Games/Game');
+const { Player, Game, Fields } = require('../Games/monopoly/Game');
 
 exports.getStatus = async (req, res) => {
     const uuid = req.params.uuid;

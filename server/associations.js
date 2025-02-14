@@ -4,6 +4,7 @@ const LobbyUser = require('./Models/LobbyUser');
 const Item = require('./Models/Item');
 const ItemUser = require('./Models/ItemUser');
 const Marketplace = require('./Models/Marketplace');
+const Bet = require('./Models/Bet');
 // const Board = require('./Models/Board');
 // const BoardUser = require('./Models/BoardUser');
 
@@ -23,9 +24,13 @@ User.belongsToMany(Item, {through: ItemUser, uniqueKey: false, foreignKey: 'user
 Marketplace.belongsTo(User);
 Marketplace.belongsTo(Item);
 
+
+User.hasMany(Bet);
+Bet.belongsTo(User);
+
 // Board.belongsTo(Lobby);
 
 // User.belongsToMany(Board, {through: BoardUser});
 // Board.belongsToMany(User, {through: BoardUser});
 
-module.exports = { Lobby, User, LobbyUser, Item, ItemUser, Marketplace};
+module.exports = { Lobby, User, LobbyUser, Item, ItemUser, Marketplace, Bet};

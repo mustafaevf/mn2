@@ -38,7 +38,7 @@ const Lobby = ({lobby, type=1}: LobbyProps) => {
         users.map((user) => {
             templateUsers.push(
                 <img
-                    className="w-13 h-13 rounded object-cover border-2 border-indigo-500"
+                    className="w-13 h-13 rounded-sm object-cover border-2 border-indigo-500"
                     src={`http://localhost:8080/uploads/${user?.image}`}
                     alt={user?.login}
                 />
@@ -51,7 +51,7 @@ const Lobby = ({lobby, type=1}: LobbyProps) => {
 
         for (let index = users.length; index < max_person; index++) {
             templateUsers.push(
-                <div className="rounded cursor-pointer border border-dashed border-[#323e60] bg-[#272f4d] w-13" style={{aspectRatio: 1/1, placeContent: 'center', display: 'grid'}} onClick={isAuth && user && users.includes(user) ?  () => handleDisconnectFromLobby(): () => handleConnectToLobby()}>
+                <div className="rounded cursor-pointer border border-dashed border-border bg-secondary w-13" style={{aspectRatio: 1/1, placeContent: 'center', display: 'grid'}} onClick={isAuth && user && users.includes(user) ?  () => handleDisconnectFromLobby(): () => handleConnectToLobby()}>
                     <div className="icon w-4 bg-[#bfcbe7]"  style={{ maskImage: 'url("/add.svg")' }}></div>
                 </div>
             );
@@ -94,7 +94,7 @@ const Lobby = ({lobby, type=1}: LobbyProps) => {
     return (
         <div
             key={id}
-            className={`relative z-1 overflow-hidden rounded-3xl px-4 py-4 flex justify-between items-center ${type == 2? 'bg-[#432f47] mb-4' : 'bg-[#1e253d]'}`}
+            className={`relative z-1 overflow-hidden rounded-sm px-4 py-4 flex border border-border justify-between items-center ${type == 2? 'bg-secondary mb-4' : 'bg-secondary'}`}
         >
             <div className="flex flex-col">
                 <span className="text-[#A6ADCD] font-bold text-2xl leading-none mb-1">{`Лобби ${id}`}</span>

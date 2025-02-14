@@ -1,7 +1,7 @@
 const Fields = require('./Field');
 const Player = require('./Player');
 const messages = require('./messages');
-const { Lobby, LobbyUser } = require('../associations');
+const { Lobby, LobbyUser } = require('../../associations');
 
 games = [];
 

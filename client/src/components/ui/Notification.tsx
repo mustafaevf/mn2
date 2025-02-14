@@ -9,14 +9,14 @@ interface NotificationProps {
 
 const Notification = ({ message, type, onClose }: NotificationProps) => {
   const notificationStyles = {
-    success: 'bg-green-500 text-white',
+    success: 'bg-success text-white',
     error: 'bg-red-500 text-white',
     info: 'bg-blue-500 text-white',
   };
 
   return (
     <div
-      className={`fixed top-4 right-4 w-80 p-4 rounded-lg shadow-lg ${notificationStyles[type]}`}
+      className={`fixed top-10 right-4 w-80 p-4 rounded shadow-lg ${notificationStyles[type]}`}
       role="alert"
     >
       <div className="flex justify-between items-center">

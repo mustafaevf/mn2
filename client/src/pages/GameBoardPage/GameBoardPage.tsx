@@ -11,7 +11,7 @@ type GameBoardPageParams = {
     uuid: string;
 };
 
-const socket: Socket = io('http://localhost:8080/api/game');
+const socket: Socket = io('http://localhost:8080/api/games/monopoly');
 
 const GameBoardPage = () => {
     const { uuid } = useParams<GameBoardPageParams>();

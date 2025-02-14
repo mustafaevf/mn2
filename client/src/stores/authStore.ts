@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import client from '../services/client';
 import { IUser } from '../types/User';
+import { useBalanceStore } from './balanceStore';
 
 interface AuthState {
   user: IUser | null;
@@ -27,6 +28,7 @@ export const useAuthStore = create<AuthState>()(
           console.log(response.data);
           const { token, candidate } = response.data;
           set({ user: candidate, isAuth: true, token: token });
+          useBalanceStore.getState().fetchBalance();
         } catch (error) {
           throw error;
         }
@@ -40,8 +42,6 @@ export const useAuthStore = create<AuthState>()(
           throw error;
         }
       },
-
-
 
       logout: () => {
         set({ user: null, token: null, isAuth: false, isRegister: false });

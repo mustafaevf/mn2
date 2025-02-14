@@ -55,3 +55,15 @@ exports.createListings = async (req, res) => {
         res.status(500).json({ error: 'Failed to create listing' });
     }
 };
+
+exports.getListingsByItemId = async (req, res) => {
+    const itemId = req.params.itemId;
+
+    try {
+        const listings = await Marketplace.findAll({where: {itemId: itemId}});
+
+        res.status(200).json(listings);
+    } catch(error) {
+        res.status(500).json({ error: 'Failed to get listing' });
+    }
+};  
