@@ -11,14 +11,153 @@ input::-webkit-inner-spin-button {
 }
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: "Montserrat Alternates", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 1rem;
-  background: #161b2e;
+  background: #0c0c0c;
 }
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1F1F1F;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #BEB7B7;
+  border-radius: 10px;
+}
+
+.line {
+  height: 122px;
+  width: 1px;
+  /* background: #fff; */
+  border-left: 1px dotted #fff;
+  margin: 0 auto;
+}
+.line-right {
+  height: 1px;
+  width: 122px;
+  /* background: #fff; */
+  border-bottom: 1px dotted #fff;
+  margin: 0 auto;
+}
+/* 
+.line {
+  height: 122px;
+  width: 1px;
+  background: repeating-linear-gradient(
+    to bottom,
+    white 0px, 
+    white 5px,  
+    transparent 5px, 
+    transparent 12px  
+  );
+  margin: 0 auto;
+} */
+
+.h-line {
+  border-bottom: 1px dotted #fff;
+  margin: 0 auto;
+}
+.v-line {
+  border-left: 1px dotted #fff;
+  margin: 0 auto;
+}
+
+.bg-linear {
+  background: linear-gradient(#131313, 0%, #060606, 100%);
+}
+
+.bg-monopoly-group-98 {
+  background: #fff;
+}
+
+.bg-monopoly-group-99 {
+  background: #262626;
+}
+
+.bg-monopoly-group-1 {
+  background: #FF0000;
+}
+
+.bg-monopoly-group-1-opacity {
+  background: #FF4A4A;
+}
+
+.bg-monopoly-group-2 {
+  background: #262626;
+}
+
+.bg-monopoly-group-3 {
+  background: #FF00AA;
+}
+
+.bg-monopoly-group-3-opacity {
+  background: #FF4AC3;
+}
+
+.bg-monopoly-group-4 {
+  background: #0066FF;
+}
+
+.bg-monopoly-group-4-opacity {
+  background: #4A93FF;
+}
+
+.bg-monopoly-group-5 {
+  background: #A100FF;
+}
+
+.bg-monopoly-group-5-opacity {
+  background: #BD4AFF;
+}
+
+.bg-monopoly-group-6 {
+  background: #BBFF00;
+}
+
+.bg-monopoly-group-6-opacity {
+  background: #CFFF4A;
+}
+
+.bg-monopoly-group-7 {
+  background: #FF7700;
+}
+
+.bg-monopoly-group-7-opacity {
+  background: #FF9F4A;
+}
+
+.bg-monopoly-group-8 {
+  background: #532DFF;
+}
+
+.bg-monopoly-group-8-opacity {
+  background: #6B4AFF;
+}
+
+.bg-monopoly-group-9 {
+  background: #FF4400;
+}
+
+.bg-monopoly-group-9-opacity {
+  background: #FF6A34;
+}
+
+.bg-monopoly-group-10 {
+  background: #00FFB7;
+}
+
+.bg-monopoly-group-10-opacity {
+  background: #71FFD7;
+}
+
 
 .bg-blur {
   backdrop-filter: blur(5px);
@@ -113,7 +252,7 @@ code {
 .h-13 {
   height: 3.25rem;
 }
-
+/* 
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -125,8 +264,7 @@ code {
 
 ::-webkit-scrollbar-track {
   background-color: #1f2937;
-  /* Change to your background color */
-}
+} */
 
 .active {
   background-image: linear-gradient(var(--angle, 0deg), var(--from, transparent) var(--from-offset, 0%), var(--to, transparent) var(--to-offset, 100%));
@@ -302,4 +440,43 @@ font-size: 1.2rem;
 
 .bg-wheel-purple {
   background-color: #ba55d3;
+}
+
+.bg-player-red {
+  background: #e05154;
+}
+
+.bg-player-grey {
+  background: #8A8A8A;
+}
+
+.bg-player-purple {
+  background: #A24AFF;
+}
+
+.bg-player-green {
+  background: #4AFF6B;
+}
+
+.color-player-red {
+  color: #e05154;
+}
+
+.color-player-grey {
+  color: #8A8A8A;
+}
+
+.color-player-purple {
+  color: #A24AFF;
+}
+
+.color-player-green {
+  background: #4AFF6B;
+}
+
+.circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 100%;
+  z-index: 99;
 }

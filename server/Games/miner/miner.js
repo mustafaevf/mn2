@@ -4,32 +4,27 @@ let gameState = {
 };
 // game {user: user, bet: bet, countMines: countMines, turn: 0, board: [], coefficient: []}
 
-const binomialCoefficient = (n, r) => {
-    if (r > n) return 0;
-    if (r === 0 || r === n) return 1;
+// const calculateCoefficients = (countMines) => {
+//     const coefficients = [];
+//     let initialCoefficient = 1 + countMines; 
 
-    let numerator = 1;
-    let denominator = 1;
+//     for (let i = 0; i < 25 - countMines; i++) {
+//         const coefficient = initialCoefficient + i * countMines / 10 + 0.2;  
+//         initialCoefficient = coefficient
+//         coefficients.push(coefficient);
+//     }
 
-    for (let i = 0; i < r; i++) {
-        numerator *= (n - i);
-        denominator *= (i + 1);
-    }
+//     return coefficients;
+// };
 
-    return numerator / denominator;
-};
-
-// Функция для расчёта коэффициента выигрыша
 const calculateCoefficients = (countMines) => {
     const coefficients = [];
     let initialCoefficient = 1.2 + countMines / 10; 
-
     for (let i = 0; i < 25 - countMines; i++) {
         const coefficient = initialCoefficient + i * countMines / 10 + 0.2;  
         initialCoefficient = coefficient
         coefficients.push(coefficient);
     }
-
     return coefficients;
 };
 
@@ -43,15 +38,6 @@ const initGame = (user, bet, countMines) => {
     }
 
     minePositions.forEach(index => board[index] = 2);
-
-    const T = 25; // Всего клеток
-    const M = countMines; // Количество мин
-    const D = countMines; // Число мин, которые нужно открыть (по сути D = M)
-    const x = 20; // Начальный коэффициент
-
-   
-    const safeCells = T - M; 
-    
 
     gameState.games.push({
         user: user,

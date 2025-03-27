@@ -9,6 +9,7 @@ import { useNotification } from '../../contexts/NotificationContext';
 import { useAuthStore } from '../../stores/authStore';
 import { useBalanceStore } from '../../stores/balanceStore';
 import CoefficientScroller from '../../components/common/miner/CoefficientScroller';
+import BetTable from '../../components/common/BetTable';
 
 type Props = {};
 
@@ -19,7 +20,7 @@ const MinerGamePage = (props: Props) => {
     const { user, isAuth } = useAuthStore();
     const [bet, setBet] = useState<string>('');
     const [countMines, setCountMines] = useState<string>('');
-    const [activeTab, setActiveTab] = useState<string>('Ставки');
+
     const [mines, setMines] = useState<number[]>(new Array(25).fill(0));
     const [canCollect, setCanCollect] = useState<boolean>(false);
     const [coefficient, setCoefficient] = useState<number>(1);
@@ -64,7 +65,7 @@ const MinerGamePage = (props: Props) => {
         });
 
         socket.on('gameOver', (data) => {
-            if(data.status === "lose") {
+            if (data.status === 'lose') {
                 addNotification(data.message, 'error');
             } else {
                 addNotification(data.message, 'success');
@@ -121,12 +122,15 @@ const MinerGamePage = (props: Props) => {
                         <BetInput bet={bet} setBet={setBet} />
                         <div className="pl-1.5 text-xs font-medium uppercase text-secondary">Кол-во мин</div>
                         <Input label="Мины" value={countMines} onChange={setCountMines} placeholder="Количество мин" />
-                        <Button label={'Сделать ставку'} onClick={() => placeBet()} />{' '}
-                        <Button label={'Забрать выигрыш'} onClick={() => collectWinnings()} />
+                        {canCollect == false ? (
+                            <Button label={'Сделать ставку'} onClick={() => placeBet()} />
+                        ) : (
+                            <Button label={'Забрать выигрыш'} onClick={() => collectWinnings()} />
+                        )}
                     </div>
                 </div>
 
-                <div className="flex-1 flex flex-col gap-4 bg-secondary items-center rounded-lg p-4">
+                <div className="flex-1 flex flex-col h-fit gap-4 bg-secondary items-center rounded-lg p-4">
                     <div className="grid grid-cols-5 gap-2 w-fit mx-auto p-4 rounded-lg border border-dot border-border">
                         {mines.map((state, index) => (
                             <div
@@ -141,11 +145,8 @@ const MinerGamePage = (props: Props) => {
                     </div>
                     <CoefficientScroller coefficients={coefficients} guessedSteps={guessedSteps} />
                 </div>
+                <BetTable s={socket} />
             </div>
-
-            <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
-
-            <div className="flex flex-col mt-4 border border-border border-dot rounded-lg h-20 p-4"></div>
         </>
     );
 };

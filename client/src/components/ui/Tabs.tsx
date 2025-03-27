@@ -11,7 +11,7 @@ const Tabs = ({activeTab, setActiveTab, tabs=["Ставки", "Мои ставк
   // const [activeTab, setActiveTab] = useState("Ставки");
 
   return (
-    <div className="flex flex-col mt-4">
+    <div className="flex flex-col">
       <div className="group flex w-fit bg-secondary rounded-lg relative p-1">
         {tabs.map((tab) => (
           <div

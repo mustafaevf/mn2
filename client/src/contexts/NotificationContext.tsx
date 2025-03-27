@@ -100,7 +100,7 @@ export const NotificationProvider = ({ children }: { children: ReactNode }) => {
 
         setTimeout(() => {
             setNotifications((prev) => prev.filter((n) => n.id !== id));
-        }, 3000);
+        }, 1500);
     };
 
     return (

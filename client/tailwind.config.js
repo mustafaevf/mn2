@@ -10,10 +10,10 @@ module.exports = {
         secondary: "#abb2cf",
       },
       colors: {
-        background: "#161b2e",
+        background: "#0c0c0c",
         header: "#141414",
         ui: "#232c48",
-        secondary: "#1e253d",
+        secondary: "#191919",
         opacity: "rgba(15, 20, 28, .75)",
         hover: "#232c48",
         box: "#262f4c",

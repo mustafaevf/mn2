@@ -41,7 +41,7 @@ const UserPage = () => {
         if (activeTab == 'Настройки') {
             return (
                 <div className="grid gap-12 grid-cols-4">
-                    <div className="rounded bg-secondary flex flex-col p-4 gap-3.5 w-[400px]">
+                    <div className="rounded bg-secondary flex flex-col p-4 gap-3.5">
                         <div className="text-xs font-medium uppercase text-secondary">Аватар</div>
                         <img
                             className="w-[4rem] h-[4rem] rounded-sm object-cover"
@@ -54,7 +54,7 @@ const UserPage = () => {
                         )}
                         <Button label="Сохранить" onClick={() => alert('save')} />
                     </div>
-                    <div className="rounded bg-secondary flex flex-col p-4 gap-3.5 w-[400px]">
+                    <div className="rounded bg-secondary flex flex-col p-4 gap-3.5">
                         <div className="text-xs font-medium uppercase text-secondary">Старый пароль</div>
                         {user && (
                             <Input label="" onChange={() => setNewLogin} value="" placeholder="Старый пароль" type='password'/>

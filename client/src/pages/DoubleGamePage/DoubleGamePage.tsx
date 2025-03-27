@@ -104,11 +104,11 @@ const DoubleGamePage = (props: Props) => {
     useEffect(() => {
         if (wheelRef.current && gameResult.rotation && gameInfo.isSpinning == true) {
             const currentRotation = gameInfo.prevRotation;
-            const targetRotation = gameResult.rotation;
-            const calculatedRotation = currentRotation + 360 * 5 + (targetRotation - (currentRotation % 360));
+            let targetRotation = gameResult.rotation;
+            // targetRotation = 360 + -1 + 360 / 54;
 
             wheelRef.current.style.transition = `transform ${5000 / 1000}s cubic-bezier(0.23, 1, 0.32, 1)`;
-            wheelRef.current.style.transform = `rotate(${calculatedRotation}deg)`;
+            wheelRef.current.style.transform = `rotate(${targetRotation}deg)`;
         }
     }, [gameResult, gameInfo.prevRotation]);
 
@@ -234,10 +234,6 @@ const DoubleGamePage = (props: Props) => {
                         <div className="wheel-container">
                             <div
                                 className={`wheel ${gameInfo.isSpinning ? 'spinning' : ''}`}
-                                style={{
-                                    transition: 'transform 0s linear',
-                                    transform: `rotate(${0}deg)`,
-                                }}
                                 ref={wheelRef}
                             >
                                 {renderSegments()}

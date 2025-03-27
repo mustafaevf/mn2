@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import useModal from '../hooks/useModal';
-import LobbyList from '../components/LobbyList';
+// import LobbyList from '../components/LobbyList';
 import Modal from '../components/ui/Modal';
 import Input from '../components/ui/Input';
 import { useAuthStore } from '../stores/authStore';

@@ -1,30 +1,73 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useModal from '../../hooks/useModal';
 import { useAuthStore } from '../../stores/authStore';
 import { createLobby } from '../../services/lobbyService';
-import LobbyList from '../../components/LobbyList';
+import io, { Socket } from 'socket.io-client';
+// import LobbyList from '../../components/LobbyList';
 import Button from '../../components/ui/Button';
+import { useNotification } from '../../contexts/NotificationContext';
+import { ILobby } from '../../types/Lobby';
+import { useNavigate } from 'react-router-dom';
+import Lobby from '../../components/common/Lobby';
 
 type Props = {};
 
+const socket: Socket = io('http://localhost:8080/api/games/monopoly');
+
 const MonopolyGamePage = (props: Props) => {
+    const navigate = useNavigate();
+    const { addNotification } = useNotification();
     const {
         isOpen: isOpenLobbyCreateModal,
         openModal: openLobbyCreateModal,
         closeModal: closeLobbyCreateModal,
     } = useModal();
     const [maxPerson, setMaxPerson] = useState<number>(1);
+    const [lobbies, setLobbies] = useState<ILobby[]>([]);
     const [autoStart, setAutoStart] = useState<boolean>(true);
+    const [waitLobby, setWaitLobby] = useState<ILobby>();
 
-    const { isAuth } = useAuthStore();
+    const { user, isAuth } = useAuthStore();
+
 
     const handleCreateLobby = async () => {
-        try {
-            const response = await createLobby(Number(maxPerson));
-        } catch (error) {
-            console.log(error);
+        if (!isAuth) {
+            addNotification('Войдите в аккаунт', 'error');
         }
+        socket.emit('create_lobby', { user: user, maxPerson: maxPerson });
     };
+
+    useEffect(() => {
+        socket.emit('get_lobbies');
+        const handleLobbiesUpdate = (lobbiesData: ILobby[]) => {
+            setLobbies(lobbiesData);
+        };
+
+        const handleError = (data: any) => {
+            addNotification(data, 'error');
+        };
+
+        const handleSuccess = (data: any) => {
+            addNotification(data, 'success');
+        };
+
+        const handleStartedGame = (data: any) => {
+            navigate(`/boards/${data.uuid}`);
+        };
+
+        socket.on('startedGame', handleStartedGame);
+        socket.on('lobbies', handleLobbiesUpdate);
+        socket.on('error', handleError);
+        socket.on('success', handleSuccess);
+
+        return () => {
+            socket.off('lobbies', handleLobbiesUpdate);
+            socket.off('error', handleError);
+            socket.off('success', handleSuccess);
+            socket.off('startedGame', handleStartedGame);
+        };
+    }, []);
+
     return (
         <>
             <div className="text-primary text-xl font-bold mb-4">Monopoly</div>
@@ -85,8 +128,17 @@ const MonopolyGamePage = (props: Props) => {
                         {isAuth && <Button label="Создать лобби" onClick={handleCreateLobby} />}
                     </div>
                 </div>
-                
-                    <LobbyList />
+                <div className="grow max-md:contents">
+                    {lobbies.length === 0 ? (
+                        <p className="text-gray-500">Нет доступных лобби.</p>
+                    ) : (
+                        <div className="flex flex-col gap-3">
+                            {lobbies.map((lobby) => (
+                                <Lobby socket={socket} lobby={lobby}/>
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
         </>
     );

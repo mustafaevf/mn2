@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
     return (
-        <nav className="w-64 h-screen bg-secondary p-2 flex flex-col space-y-4 text-white">
+        <nav className="w-69 min-w-64 h-screen bg-secondary border-r border-border p-2 flex flex-col space-y-4 text-white">
             <Link to="/games/monopoly" className="text-base hover:bg-hover rounded px-4 py-4 transition-colors duration-300">
                 Monopoly
             </Link>

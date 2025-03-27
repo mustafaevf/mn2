@@ -1,10 +1,26 @@
-const { User } = require('../../associations');
+const { User, Bet } = require('../../associations');
 const { gameState, initGame, calculateCoefficients } = require('./miner');
 const { formatMoney } = require('../../utils/formatMoney');
 
 module.exports = (io) => {
     // start(io.of('api/games/miner'));
+
+    getBets = async (game_name) => {
+        const result = await Bet.findAll({
+            where: { game: game_name },
+            limit: 20,
+            order: [['id', 'DESC']],
+            include: [{ model: User, attributes: ['login', 'image'] }],
+        });
+        console.log(result);
+        return result;
+    };
+
     io.of('api/games/miner').on('connection', (socket) => {
+        getBets('miner').then((bets) => {
+            io.of('api/games/miner').emit('getBets', bets);
+        });
+
         console.log('User from game miner connected');
 
         socket.on('getCoefficients', async (data) => {
@@ -44,6 +60,11 @@ module.exports = (io) => {
 
             // gameState.bets.push({bet: data.bet, color: data.color, user: data.user});
             initGame(user, data.bet, data.countMines);
+            await Bet.create({ amount: data.bet, currency: 'RUB', game: 'miner', status: 0, userId: user.id });
+
+            getBets('miner').then((bets) => {
+                io.of('api/games/miner').emit('getBets', bets);
+            });
             socket.emit('success', 'Выберите ячейки');
             console.log(gameState);
         });

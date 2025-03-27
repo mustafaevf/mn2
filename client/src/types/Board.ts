@@ -7,9 +7,23 @@ enum IStatus {
     LOBBY_INACTIVE = -1,
 }
 
+interface Message {
+    type: number,
+    data: string,
+}
+
+interface BoardState {
+    event: string;
+    data: {};
+    playerId: number;
+    round: number;
+}
+
 export interface Board {
     max_person: number;
     status: IStatus;
     userId: number;
+    boardState: BoardState[];
+    events: string[];
     players: Player[];
 }

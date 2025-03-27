@@ -6,7 +6,7 @@ const socketIo = require('socket.io');
 const connection = require('./config/connection');
 const path = require('path');
 const routes = require('./routes/index.routes');
-const monopolySockets = require('./Games/monopoly/socket');
+const monopolySocket = require('./Games/monopoly/socket');
 const loggerMiddleware = require('./middleware/loggerMiddleware');
 const doubleSocket = require('./Games/double/socket');
 const crashSocket = require('./Games/crash/socket');
@@ -37,10 +37,10 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api', loggerMiddleware, routes);
 // app.use('/api', routes);
 
-// monopolySockets(io);
-doubleSocket(io);
-crashSocket(io);
-minerSocket(io);
+monopolySocket(io);
+// doubleSocket(io);
+// crashSocket(io);
+// minerSocket(io);
 
 connection
     .authenticate()

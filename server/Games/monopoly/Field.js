@@ -28,6 +28,7 @@ module.exports = Fields = [
         pos: 2,
         title: '?',
         action: 'special',
+        group: 98,
         price: 0,
     },
     {
@@ -85,6 +86,7 @@ module.exports = Fields = [
         pos: 7,
         title: '?',
         action: 'special',
+        group: 98,
         price: 0,
     },
     {
@@ -250,6 +252,7 @@ module.exports = Fields = [
         title: '?',
         action: 'special',
         price: 100,
+        group: 98
     },
     {
         pos: 18,
@@ -319,6 +322,7 @@ module.exports = Fields = [
         title: '?',
         action: 'special',
         price: 0,
+        group: 98,
     },
     {
         pos: 23,
@@ -502,6 +506,7 @@ module.exports = Fields = [
         title: '?',
         action: 'special',
         price: 0,
+        group: 98,
     },
     {
         pos: 34,
@@ -571,6 +576,7 @@ module.exports = Fields = [
         title: '?',
         action: 'special',
         price: 0,
+        group: 98,
     },
     {
         pos: 39,

@@ -40,7 +40,7 @@ const Dropdown = ({
             <div
               className="icon w-2 bg-icon ml-3 mt-1"
               style={{ maskImage: "url(/down.svg)" }}
-            ></div>
+            ></div> 
           </button>
         )}
       </div>
