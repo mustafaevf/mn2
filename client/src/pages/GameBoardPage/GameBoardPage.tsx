@@ -51,6 +51,10 @@ const GameBoardPage = () => {
         setUserEvent(null);
     };
 
+    const payBank = (data: any) => {
+        socket.emit('payBank', { user, data });
+    }
+
     const offerDeal = (data: any) => {
         socket.emit('offerDeal', { user, data });
     };
@@ -139,6 +143,15 @@ const GameBoardPage = () => {
                 ];
                 callUserEvent({ title: 'Оплата', description: "9", actions });
             }
+            if (state && state.event === 'payBank') {
+                const actions = [
+                    {
+                        name: 'Оплатить',
+                        func: payTax,
+                    },
+                ];
+                callUserEvent({ title: 'Оплата', description: state.data?.amount ?? 'Неизвестная сумма', actions });
+            }
             if (state && state.event === 'offerDeal') {
                 alert('пришла сделка')
                 console.log(state.data)
@@ -221,7 +234,7 @@ const GameBoardPage = () => {
                 <div className="w-5/6 flex justify-center my-auto">
                     <GameBoard fields={fields ?? []} board={board!} userEvent={userEvent || null}/>
                     {/* <div className="relative w-[931px] h-[931px] bg-gray-900 border border-gray-700 rounded-lg p-4"> */}
-                    
+                
                     {/* </div> */}
                 </div>
 

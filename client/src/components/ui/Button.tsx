@@ -3,7 +3,7 @@ import React from 'react';
 interface ButtonProps {
     label: string;
     onClick: () => void;
-    variant?: 'primary' | 'secondary' | 'danger' | 'outline';
+    variant?: 'primary' | 'secondary' | 'danger' | 'outline' | 'monopoly';
     disabled?: boolean;
 }
 
@@ -21,6 +21,7 @@ const Button = ({
         secondary: 'bg-buttonSecondary text-white',
         danger: 'bg-red-500 text-white hover:bg-red-600 focus:ring-red-500',
         outline: 'bg-transparent border-red-500',
+        monopoly: 'bg-[#141414] text-[#4F4F4F] hover:bg-[#FFFFFF] transition-all'
     };
 
     return (

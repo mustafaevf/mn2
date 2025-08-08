@@ -11,13 +11,17 @@ input::-webkit-inner-spin-button {
 }
 body {
   margin: 0;
-  font-family: "Montserrat Alternates", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-size: 1rem;
-  background: #0c0c0c;
+  font-size: 0.875rem;
+  background: #0a131e;
+}
+
+.monopoly-board {
+  font-family: "Montserrat Alternates";
 }
 
 ::-webkit-scrollbar {
@@ -458,6 +462,22 @@ font-size: 1.2rem;
   background: #4AFF6B;
 }
 
+.bg-player-red-opacity {
+  background: #e05154;
+}
+
+.bg-player-grey-opacity {
+  background: #8A8A8A;
+}
+
+.bg-player-purple-opacity {
+  background: #A24AFF;
+}
+
+.bg-player-green-opacity {
+  background: #4AFF6B;
+}
+
 .color-player-red {
   color: #e05154;
 }
@@ -479,4 +499,7 @@ font-size: 1.2rem;
   height: 30px;
   border-radius: 100%;
   z-index: 99;
+}
+.bg-radial {
+  background: radial-gradient(circle, #141414 0%, #232323 99%);
 }

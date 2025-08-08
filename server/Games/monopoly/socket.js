@@ -248,7 +248,6 @@ module.exports = (io) => {
             if (lobbyUser) {
                 console.log(lobbyUser.lobbyId)
                 const current_game = games.find((game) => game.id === lobbyUser.lobbyId);
-                console.log(games);
                 current_game.sendMessage(data.user.id, data.message);
             }
         });
@@ -261,7 +260,6 @@ module.exports = (io) => {
             if (lobbyUser) {
                 console.log(lobbyUser.lobbyId)
                 const current_game = games.find((game) => game.id === lobbyUser.lobbyId);
-                console.log(games);
                 current_game.rollDice();
             }
         });
@@ -272,7 +270,6 @@ module.exports = (io) => {
             });
             if (lobbyUser) {
                 const current_game = games.find((game) => game.id === lobbyUser.lobbyId);
-                console.log(games);
                 current_game.buyProperty();
             }
         });

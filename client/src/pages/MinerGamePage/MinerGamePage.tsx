@@ -127,7 +127,7 @@ const MinerGamePage = (props: Props) => {
                         ) : (
                             <Button label={'Забрать выигрыш'} onClick={() => collectWinnings()} />
                         )}
-                    </div>
+                    </div>  
                 </div>
 
                 <div className="flex-1 flex flex-col h-fit gap-4 bg-secondary items-center rounded-lg p-4">
@@ -145,8 +145,8 @@ const MinerGamePage = (props: Props) => {
                     </div>
                     <CoefficientScroller coefficients={coefficients} guessedSteps={guessedSteps} />
                 </div>
-                <BetTable s={socket} />
             </div>
+            <BetTable s={socket} />
         </>
     );
 };

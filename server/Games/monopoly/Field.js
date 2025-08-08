@@ -61,6 +61,7 @@ module.exports = Fields = [
         title: 'тачка 1',
         action: 'property',
         price: 100,
+        tax: 20,
         group: 2,
     },
     {
@@ -295,7 +296,7 @@ module.exports = Fields = [
     {
         pos: 20,
         title: 'Казик',
-        action: 'casiono',
+        action: 'jail',
         price: 0,
     },
     {

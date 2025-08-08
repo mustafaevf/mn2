@@ -41,7 +41,8 @@ const Header = ({ onLogin }: HeaderProps) => {
     };
 
     return (
-        <header className="fixed top-0 right-0 bg-transparent flex items-center justify-between py-8 px-8 z-[50]">
+        <header className="bg-transparent flex items-center justify-end py-8">
+
             {isAuth ? (
                 <div className="flex items-center space-x-4">
                     <div className="bg-ui rounded-sm w-30 flex justify-center px-2  flex items-center py-2 text-primary border border-border font-medium text-sm">

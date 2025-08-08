@@ -35,8 +35,8 @@ class Game {
     }
 
     sendMessage(userId, message) {
-        const player = this._findPlayerFor(userId)
-        if(!player) {
+        const player = this._findPlayerFor(userId);
+        if (!player) {
             return;
         }
         this.broadcastMessage(this._packColorText(player, message));
@@ -80,6 +80,11 @@ class Game {
         }
     }
 
+    bankAction(playerId) {
+        const candidate = this.players.find((candidate) => candidate.id === playerId);
+        this.broadcastMessage(this._packColorText(candidate, " заплатил банку 200"));
+    }
+
     buybackProperty(playerId, property) {
         const candidate = this.players.find((candidate) => candidate.id === playerId);
         if (this.currentPlayerId == candidate.id) {
@@ -104,7 +109,9 @@ class Game {
         const player = this.players[this.currentPlayerIndex];
         let current_field = Fields.find((field) => field.pos === player.position);
 
-        player.buyProperty(current_field);
+        if(player.buyProperty(current_field) == 1) {
+            this.broadcastMessage(this._packColorText(player, ' купил поле ' + current_field.title + ' за ' + current_field.price));
+        }
         this._nextPlayer();
         this._addEvent('rollDice');
     }
@@ -113,100 +120,220 @@ class Game {
         return Math.floor(Math.random() * 6) + 1;
     }
 
+    // rollDice() {
+    //     const dice1 = Math.floor(Math.random() * 6) + 1;
+    //     const dice2 = Math.floor(Math.random() * 6) + 1;
+    //     const dice_random = dice1 + dice2;
+    //     const player = this.players[this.currentPlayerIndex];
+    //     this.broadcastMessage(this.players[this.currentPlayerIndex].login + ' выбил ' + dice1 + ':' + dice2);
+    //     if (player.position + dice_random > Fields.length) {
+    //         player.position = player.position - Fields.length + dice_random;
+    //         player.balance += 2000;
+    //         this.broadcastMessage(this.players[this.currentPlayerIndex].login + ' прошел круг и получил 2000');
+    //     } else {
+    //         player.position += dice_random;
+    //     }
+    //     const state = this.boardState[this.boardState.length - 1];
+    //     if (state.event === 'rollDice') {
+    //         this.boardState.pop();
+    //     }
+
+    //     let double = false;
+    //     if (dice1 === dice2) {
+    //         this.broadcastMessage(
+    //             this._packColorText(
+    //                 this.players[this.currentPlayerIndex],
+    //                 'выбил дубль и будет ходить еще раз'
+    //             )
+    //         );
+    //         double = true;
+    //     }
+
+    //     let current_field = Fields.find((field) => field.pos === player.position);
+    //     let isProp = true;
+    //     if (current_field) {
+    //         if (current_field.action == 'property') {
+    //             for (let el of this.players) {
+    //                 for (let pr of el.properties) {
+    //                     if (pr == current_field) {
+    //                         isProp = false;
+
+    //                         if (el.login == player.login) {
+    //                             this.broadcastMessage(
+    //                                 this.players[this.currentPlayerIndex].login + ' выпал на свою клетку '
+    //                             );
+    //                         } else {
+    //                             if (pr.status == 0) {
+    //                                 this.broadcastMessage(
+    //                                     this.players[this.currentPlayerIndex].login +
+    //                                         ' выпал на чужую клетку, но ничего платить не должен т.к поле заложено'
+    //                                 );
+    //                                 return;
+    //                             }
+    //                             this.broadcastMessage(
+    //                                 this.players[this.currentPlayerIndex].login +
+    //                                     ' выпал на чужую клетку и запалатит ' +
+    //                                     pr.tax
+    //                             );
+                               
+    //                             // this.boardState.push({
+    //                             //     playerId: this.players[this.currentPlayerIndex].id,
+    //                             //     event: 'payTax',
+    //                             //     round: this.round,
+    //                             //     data: {
+    //                             //         price: pr.tax,
+    //                             //         to: el.id,
+    //                             //         double: double,
+    //                             //     },
+    //                             // });
+
+    //                             this._addEvent(
+    //                                 'payTax',
+    //                                 { price: pr.tax, to: el.id, double: double },
+    //                                 this.players[this.currentPlayerIndex].id
+    //                             );
+    //                             return;
+    //                             // this.io.of('/api/plays').to(this.players[this.currentPlayerIndex].socketId).emit('event', 'payTax', { price: pr.price });
+    //                             // return;
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //             if (isProp) {
+    //                 this.players[this.currentPlayerIndex].checkProp(current_field);
+    //                 this.broadcastMessage(
+    //                     this._packColorText(
+    //                         this.players[this.currentPlayerIndex],
+    //                         ' выпал на поле ' + current_field.title + ' и задумывается о покупке.'
+    //                     )
+    //                 );
+    //                 let message = 'Купить ' + current_field.title + ' за ' + current_field.price;
+    //                 this._addEvent('buyProperty');
+    //                 return;
+    //             }
+    //         } else if (current_field.action === 'special') {
+    //             if (dice1 != dice2) {
+    //                 this._nextPlayer();
+    //             }
+    //             this._addEvent('rollDice');
+    //             return;
+    //         } else if (current_field.action === 'bank') {
+    //             if (dice1 != dice2) {
+    //                 this._nextPlayer();
+    //             }
+    //             this._addEvent('rollDice');
+    //             return;
+    //         } else if (current_field.action === 'super-special') {
+    //             if (dice1 != dice2) {
+    //                 this._nextPlayer();
+    //             }
+    //             this._addEvent('rollDice');
+    //             return;
+    //         } else if (current_field.action === 'jail') {
+    //             this.broadcastMessage(this.players[this.currentPlayerIndex].login + ' кайфует');
+    //             if (dice1 != dice2) {
+    //                 this._nextPlayer();
+    //             }
+    //             this._addEvent('rollDice');
+    //             return;
+    //         } else if (current_field.action === 'ot') {
+    //             // this.players[this.currentPlayerIndex].position = 10;
+    //             this.broadcastMessage(
+    //                 this.players[this.currentPlayerIndex].login +
+    //                     ' попал в тюрьму потому что енблан. И пропустит 3 хода'
+    //             );
+    //             if (dice1 != dice2) {
+    //                 this._nextPlayer();
+    //             }
+    //             this._addEvent('rollDice');
+    //             return; ``
+    //         }
+    //     }
+    //     if (dice1 != dice2) {
+    //         this._nextPlayer();
+    //     }
+    //     this._addEvent('rollDice');
+    // }
+
     rollDice() {
         const dice1 = Math.floor(Math.random() * 6) + 1;
         const dice2 = Math.floor(Math.random() * 6) + 1;
         const dice_random = dice1 + dice2;
         const player = this.players[this.currentPlayerIndex];
-        this.broadcastMessage(this.players[this.currentPlayerIndex].login + ' выбил ' + dice1 + ':' + dice2);
-        if (player.position + dice_random > Fields.length) {
-            player.position = player.position - Fields.length + dice_random;
+    
+        this.broadcastMessage(`${player.login} выбил ${dice1}:${dice2}`);
+    
+        if (player.position + dice_random >= Fields.length) {
+            player.position = (player.position + dice_random) % Fields.length;
             player.balance += 2000;
-            this.broadcastMessage(this.players[this.currentPlayerIndex].login + ' прошел круг и получил 2000');
+            this.broadcastMessage(`${player.login} прошел круг и получил 2000`);
         } else {
             player.position += dice_random;
         }
+    
         const state = this.boardState[this.boardState.length - 1];
-        if (state.event === 'rollDice') {
+        if (state && state.event === 'rollDice') {
             this.boardState.pop();
         }
-
-        let current_field = Fields.find((field) => field.pos === player.position);
-        let isProp = true;
-        if (current_field) {
-            if (current_field.action == 'property') {
-                for (let el of this.players) {
-                    for (let pr of el.properties) {
-                        if (pr == current_field) {
-                            isProp = false;
-
-                            if (el.login == player.login) {
-                                this.broadcastMessage(
-                                    this.players[this.currentPlayerIndex].login + ' выпал на свою клетку '
-                                );
-                            } else {
-                                if (pr.status == 0) {
-                                    this.broadcastMessage(
-                                        this.players[this.currentPlayerIndex].login +
-                                            ' выпал на чужую клетку, но ничего платить не должен'
-                                    );
-                                    return;
-                                }
-                                this.broadcastMessage(
-                                    this.players[this.currentPlayerIndex].login + ' выпал на чужую клетку '
-                                );
-                                let double = false;
-                                if (dice1 === dice2) {
-                                    this.broadcastMessage(
-                                        this.players[this.currentPlayerIndex].login +
-                                            ' выбил дубль и должен ходить еще раз'
-                                    );
-                                    double = true;
-                                }
-                                this.boardState.push({
-                                    playerId: this.players[this.currentPlayerIndex].id,
-                                    event: 'payTax',
-                                    round: this.round,
-                                    data: {
-                                        price: pr.tax,
-                                        to: el.id,
-                                        double: double,
-                                    },
-                                });
-
-                                // this.io.of('/api/plays').to(this.players[this.currentPlayerIndex].socketId).emit('event', 'payTax', { price: pr.price });
-                                return;
-                            }
+    
+        let double = dice1 === dice2;
+        if (double) {
+            this.broadcastMessage(
+                this._packColorText(player, 'выбил дубль и будет ходить еще раз')
+            );
+        }
+    
+        let current_field = Fields.find(field => field.pos === player.position);
+        if (!current_field) {
+            this._nextPlayer();
+            this._addEvent('rollDice');
+            return;
+        }
+    
+        if (current_field.action === 'property') {
+            let isProp = true;
+            for (let owner of this.players) {
+                if (owner.properties.includes(current_field)) {
+                    isProp = false;
+                    if (owner.id !== player.id) {
+                        if (current_field.status === 0) {
+                            this.broadcastMessage(`${player.login} выпал на заложенное поле и не платит.`);
+                        } else {
+                            this.broadcastMessage(
+                                `${player.login} выпал на чужую клетку и заплатит ${current_field.tax}`
+                            );
+                            this._addEvent('payTax', { price: current_field.tax, to: owner.id, double }, player.id);
                         }
+                    } else {
+                        this.broadcastMessage(`${player.login} выпал на свою клетку.`);
+                        if (!double) {
+                            this._nextPlayer();
+                        }
+                        this._addEvent('rollDice');
                     }
-                }
-                if (isProp) {
-                    this.players[this.currentPlayerIndex].checkProp(current_field);
-                    this.broadcastMessage(this.players[this.currentPlayerIndex].login + ' выпал на поле');
-                    let message = 'Купить ' + current_field.title + ' за ' + current_field.price;
-                    this._addEvent('buyProperty');
                     return;
                 }
-            } else if (current_field.action === 'special') {
-            } else if (current_field.action === 'bank') {
-            } else if (current_field.action === 'super-special') {
-            } else if (current_field.action === 'jail') {
-                this.broadcastMessage(this.players[this.currentPlayerIndex].login + ' кайфует');
-            } else if (current_field.action === 'ot') {
-                this.players[this.currentPlayerIndex].position = 10;
-                this.broadcastMessage(
-                    this.players[this.currentPlayerIndex].login +
-                        ' попал в тюрьму потому что енблан. И пропустит 3 хода'
-                );
             }
+    
+            if (isProp) {
+                player.checkProp(current_field);
+                this.broadcastMessage(
+                    this._packColorText(player, ` выпал на поле ${current_field.title} и задумывается о покупке.`)
+                );
+                this._addEvent('buyProperty');
+                return;
+            }
+        } else if(current_field.action == 'bank') {
+            this._addEvent('payBank', {amount: 200});
+            return;
         }
-        if (dice1 != dice2) {
-            // this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
-            // this.currentPlayerId = this.players[this.currentPlayerIndex].id;
-            this._nextPlayer();
-        }
-        this._addEvent('rollDice');
+        // console.log("kkk");
+        // if (!double) {
+        //     this._nextPlayer();
+        // }
+        // this._addEvent('rollDice');
     }
+    
 
     _movePlayer(player, diceSum) {
         if (player.position + diceSum > Fields.length) {
@@ -220,6 +347,7 @@ class Game {
 
     payTax() {
         const state = this.boardState[this.boardState.length - 1];
+        console.log(state);
         if (state.event === 'payTax') {
             this.boardState.pop();
         }
@@ -228,6 +356,10 @@ class Game {
         const to = this.players.find((candidate) => candidate.id === state.data.to);
         to.addBalance(state.data.price);
         if (!state.double) {
+            const index = this.boardState.findIndex(bs => bs.playerId === state.playerId);
+            if (index !== -1) {
+                this.boardState.splice(index, 1);
+            }
             this._nextPlayer();
             // this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
             // this.currentPlayerId = this.players[this.currentPlayerIndex].id;
@@ -246,19 +378,24 @@ class Game {
         let currentPlayerIndex = Math.floor(Math.random() * this.players.length);
         this.currentPlayerIndex = currentPlayerIndex;
         this.currentPlayerId = this.players[currentPlayerIndex].id;
-       
-        
-        this.broadcastMessage(`#{${this.players[currentPlayerIndex].color}}${this.players[currentPlayerIndex].login}# бросает куб первым`);
+
+        this.broadcastMessage(
+            `#{${this.players[currentPlayerIndex].color}}${this.players[currentPlayerIndex].login}# бросает куб первым`
+        );
         this._addEvent('rollDice');
     }
 
     _nextPlayer() {
         this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
         this.currentPlayerId = this.players[this.currentPlayerIndex].id;
+        // if (this.players[this.currentPlayerIndex].status == 0) {
+           
+        // } else {
+        //     this._nextPlayer();
+        // }
     }
 
     _addEvent(event, _params, _playerId) {
-        console.log(event);
         this.boardState.push({
             playerId: _playerId ? _playerId : this.players[this.currentPlayerIndex].id,
             event: event,
@@ -275,12 +412,10 @@ class Game {
     broadcastMessage(msg) {
         // const {player, message} = data;
         this.events.push(msg);
-        console.log(this.events);
         this._update();
     }
 
     _update() {
-        console.log(this.boardState);
         this.io.of('/api/games/monopoly').to(this.id).emit('update', {
             id: this.id,
             uuid: this.uuid,

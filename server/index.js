@@ -38,9 +38,9 @@ app.use('/api', loggerMiddleware, routes);
 // app.use('/api', routes);
 
 monopolySocket(io);
-// doubleSocket(io);
-// crashSocket(io);
-// minerSocket(io);
+doubleSocket(io);
+crashSocket(io);
+minerSocket(io);
 
 connection
     .authenticate()

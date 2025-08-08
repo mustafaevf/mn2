@@ -2,6 +2,7 @@ import React from 'react';
 import { Board } from '../../../types/Board';
 import PlayerCircle from './PlayerCircle';
 import { userEvent } from '../../../pages/GameBoardPage/GameBoardPage';
+import Button from '../../ui/Button';
 
 type Field = {
     pos: number;
@@ -31,6 +32,20 @@ const GameBoard = ({ fields, board, userEvent }: GameBoardProps) => {
     const cellHeightSides = 71;
     const cornerSize = 144;
 
+    const getFieldOwner = (fieldPos: number) => {
+        for (const user of board.players) {
+            for (const pr of user.properties) {
+                if (pr.pos === fieldPos) {
+                    if (pr.status == 0) {
+                        return [user.color + '-opacity isPawned', user.id, pr.status, pr.tax];
+                    }
+                    return [user.color, user.id, pr.status, pr.tax];
+                }
+            }
+        }
+        return [null, null, null, null];
+    };
+
     console.log(fields[1].group);
     return (
         <div className="relative w-[927px] h-[927px]">
@@ -44,16 +59,21 @@ const GameBoard = ({ fields, board, userEvent }: GameBoardProps) => {
                     />
                 ))}
             <div className="absolute top-2 left-2 text-lg font-semibold">Старт</div>
-            {
-                userEvent && (
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-2xl font-bold">
-                    {userEvent.description}
-                    {userEvent.actions.map((action) => (
-                        <button onClick={action.func}>{action.name}</button>
-                    ))}
+            {userEvent && (
+                <div className="absolute left-[190px] top-[190px] right-[190px]">
+                    <div className="bg-[#101010] w-full rounded  flex flex-col">
+                        <div className="text-xl font-bold bg-radial rounded-tl rounded-tr p-4">
+                            {userEvent.description}
+                        </div>
+                        <div className="flex items-center justify-center gap-1 p-4">
+                            {userEvent.actions.map((action) => (
+                                <Button label={action.name} onClick={action.func} variant="monopoly" />
+                                // <button onClick={action.func}>{action.name}</button>
+                            ))}
+                        </div>
                     </div>
-                )
-            }
+                </div>
+            )}
             {/* <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-2xl font-bold">
                 ⏳ 11:42
             </div> */}
@@ -111,6 +131,12 @@ const GameBoard = ({ fields, board, userEvent }: GameBoardProps) => {
                             left: `${cornerSize + index * cellWidthTopBottom}px`,
                         }}
                     >
+                        {getFieldOwner(index + 1)[0] && (
+                            <div
+                                className={`absolute bottom-[-10px] ${index == 0 ? `left-[3px] w-[67px]` : ` w-full`} h-[7px] bg-player-${getFieldOwner(index + 1)[0]}`}
+                            ></div>
+                        )}
+
                         {fields[index + 1].group ? (
                             <div
                                 className={`absolute bottom-0 w-full flex items-center justify-center h-[30px] bg-monopoly-group-${fields[index + 1]?.group ?? 99}-opacity`}
@@ -148,6 +174,12 @@ const GameBoard = ({ fields, board, userEvent }: GameBoardProps) => {
                             top: `${cornerSize + index * cellHeightSides}px`,
                         }}
                     >
+                        {getFieldOwner(index + 11)[0] && (
+                            <div
+                                className={`absolute left-[-10px] h-full w-[7px] bg-player-${getFieldOwner(index + 11)[0]}`}
+                            ></div>
+                        )}
+
                         {fields[index + 11].group ? (
                             <div
                                 className={`absolute left-0 h-full flex items-center justify-center w-[30px] bg-monopoly-group-${fields[index + 11]?.group ?? 99}-opacity`}
@@ -189,6 +221,12 @@ const GameBoard = ({ fields, board, userEvent }: GameBoardProps) => {
                         left: `${cornerSize + index * cellWidthTopBottom}px`,
                     }}
                 >
+                    {getFieldOwner(29 - index)[0] && (
+                        <div
+                            className={`absolute top-[-10px] w-full h-[7px] bg-player-${getFieldOwner(29 - index)[0]}`}
+                        ></div>
+                    )}
+
                     {fields[29 - index].group ? (
                         <div
                             className={`absolute bottom-0 w-full flex items-center justify-center h-[30px] bg-monopoly-group-${fields[29 - index]?.group ?? 99}-opacity`}
@@ -224,6 +262,11 @@ const GameBoard = ({ fields, board, userEvent }: GameBoardProps) => {
                         top: `${cornerSize + index * cellHeightSides}px`,
                     }}
                 >
+                    {getFieldOwner(39 - index)[0] && (
+                        <div
+                            className={`absolute right-[-10px] h-full w-[7px] bg-player-${getFieldOwner(39 - index)[0]}`}
+                        ></div>
+                    )}
                     {fields[39 - index].group ? (
                         <div
                             className={`absolute right-0 h-full flex items-center justify-center w-[30px] bg-monopoly-group-${fields[39 - index]?.group ?? 99}-opacity`}

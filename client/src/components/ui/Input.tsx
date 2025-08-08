@@ -38,7 +38,7 @@ const Input = ({
                 type={type}
                 onChange={(e) => onChange(e.target.value)}
                 placeholder={placeholder}
-                className={`py-3 h-13 rounded-sm bg-ui text-base text-secondary border border-[transparent] focus:outline-none focus:border border-border 
+                className={`py-3 h-13 rounded-sm bg-ui text-sm text-secondary border border-[transparent] focus:outline-none focus:border border-border 
                     ${iconType === "rub" ? "pl-10 pr-4" : "px-4"}`}
             />
         </div>

@@ -33,13 +33,41 @@ function App() {
 
     return (
         <NotificationProvider>
-            <Header onLogin={openLoginModal} />
-
             <Routes>
                 <Route path="/boards/:uuid" element={<GameBoardPage />} />
             </Routes>
-            {!isBoardRoute && <Sidebar />}
-            {!isBoardRoute && (
+            <div className="flex flex-col lg:max-w-[1400px] 2xl:max-w-[1800px] mx-auto">
+                {!isBoardRoute && <Header onLogin={openLoginModal} />}
+                <div className="grid grid-cols-[250px_1fr_150px]">
+                    <Sidebar />
+                   
+                        {!isBoardRoute && (
+                            <div className="flex flex-grow">    
+                                <div className="flex flex-col flex-grow ml-8 mr-8">
+                                    <Routes>
+                                        <Route path="/" element={<MainPage />} />
+                                        <Route path="/games/monopoly" element={<MonopolyGamePage />} />
+                                        <Route path="/games/double" element={<DoubleGamePage />} />
+                                        <Route path="/games/crash" element={<CrashGamePage />} />
+                                        <Route path="/games/miner" element={<MinerGamePage />} />
+                                        <Route path="/monopoly" element={<MainPage />} />
+                                        <Route path="/users/:userId" element={<UserPage />} />
+                                        <Route path="/marketplace" element={<MarketplacePage />} />
+                                    </Routes>
+                                </div>
+                            </div>
+                        )}
+                    <div className="max-w">
+                        <div className="flex flex-col">
+                            <div className="bg-secondary rounded p-4 text-base text-primary uppercase">
+                                Чат
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {/* {!isBoardRoute && (
                 <div className="flex h-screen">
                     <div className="flex flex-col flex-grow p-8 mt-8 ml-8 mr-8">
                         <Routes>
@@ -54,7 +82,7 @@ function App() {
                         </Routes>
                     </div>
                 </div>
-            )}
+            )} */}
 
             <Modal title="Авторизация" isOpen={isOpenLoginModal} onClose={closeLoginModal}>
                 <div className="flex flex-col gap-4">

@@ -14,12 +14,13 @@ class Player {
 
     buyProperty(property) {
         if (this.balance - property.price < 0) {
-            return;
+            return 0;
         }
         this.balance -= property.price;
         property.status = 1;
         property.currentLevel = 0;
         this.properties.push(property);
+        return 1;
     }
 
     checkProp(property) {

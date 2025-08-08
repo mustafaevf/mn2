@@ -14,7 +14,7 @@ interface Message {
 
 interface BoardState {
     event: string;
-    data: {};
+    data: Record<string, any>;
     playerId: number;
     round: number;
 }
